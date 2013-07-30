@@ -1,0 +1,28 @@
+name: Bytecraft
+author: Sabersamus
+main: info.bytecraft.Bytecraft
+description: The plugin for Bytecraft
+version: 0.0.1
+commands:
+    god:
+        description: Send a message as the default red god
+        usage: /<command> <message>
+    message:
+        description: Send a message to another player
+        usage: /<command> <player> <message>
+        aliases: [m, to]
+    say:
+        description: Send a message as god
+        usage: /<command> <message>
+    user:
+        description: Manage players permissions
+        usage: /<command> make <setter|warned|hardwarned> <player>
+    wallet:
+        description: Manage your wallet
+        usage: /<command> <balance>
+    warp:
+        description: Warp to a far away land
+        usage: /<command> city
+    who:
+        description: See who's online
+        usage: /<command>
