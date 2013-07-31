@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.commands.MessageCommand;
@@ -40,7 +41,7 @@ public class Bytecraft extends JavaPlugin
         }
 
         registerEvents();
-        
+
         getCommand("god").setExecutor(new SayCommand(this, "god"));
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
@@ -66,7 +67,8 @@ public class Bytecraft extends JavaPlugin
     public BytecraftPlayer getPlayer(String name)
     {
         BytecraftPlayer player = players.get(name);
-        player.setDisplayName(player.getNameColor() + player.getDelegate().getName());
+        player.setDisplayName(player.getNameColor()
+                + player.getDelegate().getName());
         return player;
     }
 
@@ -101,7 +103,7 @@ public class Bytecraft extends JavaPlugin
             }
         }
     }
-    
+
     public void removePlayer(Player player)
     {
         this.players.remove(player.getName());

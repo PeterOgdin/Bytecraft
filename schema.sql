@@ -138,6 +138,7 @@ DROP TABLE IF EXISTS `bless`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bless` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
+  `player_name` varchar(32) NOT NULL,
   `x` int(255) NOT NULL,
   `y` int(255) NOT NULL,
   `z` int(255) NOT NULL,

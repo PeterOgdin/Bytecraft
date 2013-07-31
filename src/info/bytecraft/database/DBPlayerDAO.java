@@ -56,7 +56,6 @@ public class DBPlayerDAO
         }
 
         loadSettings(player);
-
         return player;
     }
 

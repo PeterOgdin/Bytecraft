@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.api.Notification;
 import info.bytecraft.commands.AbstractCommand;
 
 public class MessageCommand extends AbstractCommand
@@ -34,7 +35,7 @@ public class MessageCommand extends AbstractCommand
                     + target.getDisplayName() + ": " + ChatColor.AQUA
                     + message.toString().trim());
         }
-        target.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
+        target.sendNotification(Notification.MESSAGE);
 
         return true;
     }
