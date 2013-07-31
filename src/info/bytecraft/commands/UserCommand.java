@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.api.Notification;
 import info.bytecraft.database.DBPlayerDAO;
 import info.tregmine.database.ConnectionPool;
 
@@ -27,8 +29,13 @@ public class UserCommand extends AbstractCommand
 
         if (args.length == 3) {
             if ("make".equalsIgnoreCase(args[0])) {
+                Player delegate = Bukkit.getPlayer(args[2]);
+                if(delegate == null){
+                    player.sendNotification(Notification.COMMAND_FAIL);
+                    return true;
+                }
                 BytecraftPlayer target =
-                        plugin.getPlayer(Bukkit.getPlayer(args[2]));
+                        plugin.getPlayer(delegate);
                 if (target.isOnline()) {
                     DBPlayerDAO dbPlayer = null;
                     Connection conn = null;
@@ -85,6 +92,7 @@ public class UserCommand extends AbstractCommand
                 else {
                     player.sendMessage("No player found by the name of: "
                             + args[2]);
+                    player.sendNotification(Notification.COMMAND_FAIL);
                 }
             }
         }

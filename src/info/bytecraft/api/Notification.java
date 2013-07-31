@@ -9,8 +9,9 @@ import org.bukkit.Sound;
  */
 public enum Notification {
     MESSAGE(Sound.LEVEL_UP),
-    BLESS(Sound.LAVA_POP),
-    SUMMONED(Sound.ENDERMAN_TELEPORT);
+    BLESS(Sound.ENDERDRAGON_WINGS),
+    SUMMONED(Sound.ENDERMAN_TELEPORT),
+    COMMAND_FAIL(Sound.ZOMBIE_DEATH);
     
     private final Sound sound;
     
