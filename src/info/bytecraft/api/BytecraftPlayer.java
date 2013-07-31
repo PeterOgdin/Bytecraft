@@ -69,8 +69,9 @@ public class BytecraftPlayer extends PlayerDelegate
 
     private String color;
     private String godColor;
-
     private String chatChannel = "GLOBAL";
+    
+    private BytecraftPlayer blessTarget;
 
     public BytecraftPlayer(Player player)
     {
@@ -280,4 +281,19 @@ public class BytecraftPlayer extends PlayerDelegate
         this.godColor = godColor;
     }
 
+    public BytecraftPlayer getBlessTarget()
+    {
+        return blessTarget;
+    }
+
+    public void setBlessTarget(BytecraftPlayer blessTarget)
+    {
+        this.blessTarget = blessTarget;
+    }
+    
+    public void sendNotification(Notification notif)
+    {
+        this.playSound(getLocation(), notif.getSound(), 1, 1);
+    }
+    
 }
