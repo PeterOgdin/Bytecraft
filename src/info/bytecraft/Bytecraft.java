@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.commands.BlessCommand;
 import info.bytecraft.commands.MessageCommand;
 import info.bytecraft.commands.SayCommand;
 import info.bytecraft.commands.UserCommand;
@@ -41,7 +42,8 @@ public class Bytecraft extends JavaPlugin
         }
 
         registerEvents();
-
+        
+        getCommand("bless").setExecutor(new BlessCommand(this));
         getCommand("god").setExecutor(new SayCommand(this, "god"));
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
@@ -66,10 +68,13 @@ public class Bytecraft extends JavaPlugin
 
     public BytecraftPlayer getPlayer(String name)
     {
-        BytecraftPlayer player = players.get(name);
-        player.setDisplayName(player.getNameColor()
-                + player.getDelegate().getName());
-        return player;
+        if(players.containsKey(name)){
+            BytecraftPlayer player = players.get(name);
+            player.setDisplayName(player.getNameColor() + player.getName());
+            return player;
+        }else{
+            return addPlayer(Bukkit.getPlayer(name));
+        }
     }
 
     public BytecraftPlayer addPlayer(Player srcPlayer)

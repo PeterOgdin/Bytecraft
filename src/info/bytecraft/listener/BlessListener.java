@@ -74,7 +74,8 @@ public class BlessListener implements Listener
                 if(dbBless.bless(event.getClickedBlock(), target)){
                     target.sendMessage(ChatColor.AQUA + "Your god has blessed a block in your name!");
                     target.sendNotification(Notification.BLESS);
-                    player.sendMessage(ChatColor.AQUA + "You have blessed a block for: " + target.getDisplayName());
+                    player.sendMessage(ChatColor.AQUA + "You have blessed a block for " + target.getDisplayName());
+                    player.setBlessTarget(null);
                 }
             }catch(SQLException e){
                 throw new RuntimeException(e);

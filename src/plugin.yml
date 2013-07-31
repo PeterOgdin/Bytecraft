@@ -4,6 +4,9 @@ main: info.bytecraft.Bytecraft
 description: The plugin for Bytecraft
 version: 0.0.1
 commands:
+    bless:
+        description: Bless a block for a player
+        usage: /<command> <player>
     god:
         description: Send a message as the default red god
         usage: /<command> <message>
