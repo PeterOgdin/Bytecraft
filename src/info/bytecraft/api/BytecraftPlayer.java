@@ -293,7 +293,7 @@ public class BytecraftPlayer extends PlayerDelegate
     
     public void sendNotification(Notification notif)
     {
-        this.playSound(getLocation(), notif.getSound(), 1, 1);
+        this.playSound(getLocation(), notif.getSound(), 2F, 1F);
     }
     
 }

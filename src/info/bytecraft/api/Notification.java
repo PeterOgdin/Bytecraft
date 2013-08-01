@@ -13,7 +13,7 @@ public enum Notification {
     BLESS(Sound.ENDERDRAGON_WINGS),
     SERVER_MESSAGE(Sound.AMBIENCE_THUNDER),
     SUMMONED(Sound.ENDERMAN_TELEPORT),
-    COMMAND_FAIL(Sound.ZOMBIE_DEATH);
+    COMMAND_FAIL(Sound.CLICK);
     
     private final Sound sound;
     

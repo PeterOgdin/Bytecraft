@@ -9,6 +9,7 @@ import java.util.Map;
 
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.commands.BlessCommand;
+import info.bytecraft.commands.KickCommand;
 import info.bytecraft.commands.MessageCommand;
 import info.bytecraft.commands.SayCommand;
 import info.bytecraft.commands.UserCommand;
@@ -45,6 +46,7 @@ public class Bytecraft extends JavaPlugin
         
         getCommand("bless").setExecutor(new BlessCommand(this));
         getCommand("god").setExecutor(new SayCommand(this, "god"));
+        getCommand("kick").setExecutor(new KickCommand(this));
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
         getCommand("user").setExecutor(new UserCommand(this));

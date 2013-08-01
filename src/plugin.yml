@@ -10,6 +10,9 @@ commands:
     god:
         description: Send a message as the default red god
         usage: /<command> <message>
+    kick:
+        description: Kick a player
+        usage: /<command> <player>
     message:
         description: Send a message to another player
         usage: /<command> <player> <message>
