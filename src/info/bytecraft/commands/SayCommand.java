@@ -6,6 +6,7 @@ import org.bukkit.Server;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.api.Notification;
 
 public class SayCommand extends AbstractCommand
 {
@@ -37,6 +38,9 @@ public class SayCommand extends AbstractCommand
         else if ("god".equalsIgnoreCase(getCommand())) {
             Bukkit.broadcastMessage(ChatColor.RED + "<GOD> " + ChatColor.LIGHT_PURPLE + argsToMessage(args));
         }
+        for(BytecraftPlayer other: plugin.getOnlinePlayers()){
+            other.sendNotification(Notification.SERVER_MESSAGE);
+        }
         return true;
     }
 
@@ -45,6 +49,9 @@ public class SayCommand extends AbstractCommand
         if(args.length == 0)return true;
         if ("say".equalsIgnoreCase(getCommand())) {
             Bukkit.broadcastMessage(ChatColor.BLUE + "<GOD> " + ChatColor.LIGHT_PURPLE + argsToMessage(args));
+        }
+        for(BytecraftPlayer other: plugin.getOnlinePlayers()){
+            other.sendNotification(Notification.SERVER_MESSAGE);
         }
         return true;
     }

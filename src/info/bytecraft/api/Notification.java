@@ -8,8 +8,10 @@ import org.bukkit.Sound;
  * @author Robert Catron
  */
 public enum Notification {
+    NONE(null),
     MESSAGE(Sound.LEVEL_UP),
     BLESS(Sound.ENDERDRAGON_WINGS),
+    SERVER_MESSAGE(Sound.AMBIENCE_THUNDER),
     SUMMONED(Sound.ENDERMAN_TELEPORT),
     COMMAND_FAIL(Sound.ZOMBIE_DEATH);
     

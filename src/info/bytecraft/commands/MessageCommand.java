@@ -2,7 +2,6 @@ package info.bytecraft.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import info.bytecraft.Bytecraft;
@@ -22,6 +21,10 @@ public class MessageCommand extends AbstractCommand
     {
         Player delegate = Bukkit.getPlayer(args[0]);
         BytecraftPlayer target = plugin.getPlayer(delegate);
+        if(!target.isOnline()){
+            player.sendNotification(Notification.COMMAND_FAIL);
+            return true;
+        }
 
         StringBuilder message = new StringBuilder();
         for (int i = 1; i < args.length; i++) {
