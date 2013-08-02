@@ -221,7 +221,7 @@ public class DBPlayerDAO
         updateProperty(player, "guard", false);
         updateProperty(player, "warned", false);
         updateProperty(player, "hard_warned", false);
-        updateProperty(player, "tp_block", false);
+        updateProperty(player, "tpblock", false);
         updateProperty(player, "invisible", false);
         updateProperty(player, "god_color", "red");
         return player;
@@ -377,7 +377,7 @@ public class DBPlayerDAO
     {
         PreparedStatement stm = null;
         try{
-            stm = conn.prepareStatement("SELECT * FROM player WHERE id = ?");
+            stm = conn.prepareStatement("SELECT * FROM player WHERE player_id = ?");
             stm.setInt(1, player.getId());
             stm.execute();
             ResultSet rs = stm.getResultSet();
@@ -413,5 +413,27 @@ public class DBPlayerDAO
             }
         }
     }
-
+    
+    public String getProperty(BytecraftPlayer player, String key)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM player_property WHERE player_id = ?");
+            stm.setInt(1, player.getId());
+            stm.execute();
+            ResultSet rs = stm.getResultSet();
+            if(rs.next()){
+                return rs.getString(key);
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
+        return "";
+    }
 }

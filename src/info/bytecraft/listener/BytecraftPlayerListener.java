@@ -2,6 +2,7 @@ package info.bytecraft.listener;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.api.PlayerBannedException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -49,9 +50,10 @@ public class BytecraftPlayerListener implements Listener
     @EventHandler
     public void onLogin(PlayerLoginEvent event)
     {
-        BytecraftPlayer player = plugin.addPlayer(event.getPlayer());
-        if (player == null) {
-            event.disallow(Result.KICK_BANNED, "Please try again later");
+        try{
+            plugin.addPlayer(event.getPlayer());
+        }catch(PlayerBannedException e){
+            event.disallow(Result.KICK_BANNED, e.getMessage());
         }
     }
 
