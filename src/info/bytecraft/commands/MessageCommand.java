@@ -28,7 +28,7 @@ public class MessageCommand extends AbstractCommand
             }
 
             StringBuilder message = new StringBuilder();
-            for (int i = 2; i < args.length; i++) {
+            for (int i = 1; i < args.length; i++) {
                 message.append(args[i] + " ");
             }
 
