@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -74,5 +75,11 @@ public class BytecraftPlayerListener implements Listener
         if (player.isAdmin()) {
             event.setCancelled(true);
         }
+    }
+    
+    @EventHandler
+    public void onKick(PlayerKickEvent event)
+    {
+        event.setLeaveMessage(null);
     }
 }

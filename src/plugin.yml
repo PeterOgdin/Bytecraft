@@ -26,6 +26,10 @@ commands:
     say:
         description: Send a message as god
         usage: /<command> <message>
+    teleport:
+        description: Teleport to a player
+        usage: /<command> <player>
+        aliases: [tp, tele]
     user:
         description: Manage players permissions
         usage: /<command> make <setter|warned|hardwarned> <player>
