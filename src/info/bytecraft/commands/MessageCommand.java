@@ -19,27 +19,29 @@ public class MessageCommand extends AbstractCommand
 
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        Player delegate = Bukkit.getPlayer(args[0]);
-        BytecraftPlayer target = plugin.getPlayer(delegate);
-        if(!target.isOnline()){
-            player.sendNotification(Notification.COMMAND_FAIL);
-            return true;
-        }
+        if (args.length >= 2) {
+            Player delegate = Bukkit.getPlayer(args[0]);
+            BytecraftPlayer target = plugin.getPlayer(delegate);
+            if (!target.isOnline()) {
+                player.sendNotification(Notification.COMMAND_FAIL);
+                return true;
+            }
 
-        StringBuilder message = new StringBuilder();
-        for (int i = 1; i < args.length; i++) {
-            message.append(args[i] + " ");
-        }
+            StringBuilder message = new StringBuilder();
+            for (int i = 2; i < args.length; i++) {
+                message.append(args[i] + " ");
+            }
 
-        target.sendMessage(ChatColor.GOLD + "<From>" + player.getDisplayName()
-                + ": " + ChatColor.AQUA + message.toString().trim());
-        if (!target.isInvisible()) {
-            player.sendMessage(ChatColor.GOLD + "<To>"
-                    + target.getDisplayName() + ": " + ChatColor.AQUA
+            target.sendMessage(ChatColor.GOLD + "<From> "
+                    + player.getDisplayName() + ": " + ChatColor.GREEN
                     + message.toString().trim());
+            if (!target.isInvisible()) {
+                player.sendMessage(ChatColor.GOLD + "<To> "
+                        + target.getDisplayName() + ": " + ChatColor.GREEN
+                        + message.toString().trim());
+            }
+            target.sendNotification(Notification.MESSAGE);
         }
-        target.sendNotification(Notification.MESSAGE);
-
         return true;
     }
 

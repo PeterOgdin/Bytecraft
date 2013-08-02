@@ -30,7 +30,7 @@ public class KickCommand extends AbstractCommand
         }
         
         Player delegate = Bukkit.getPlayer(args[0]);
-        if(delegate.isOnline()){
+        if(delegate != null){
             BytecraftPlayer target = plugin.getPlayer(delegate);
             if(!target.getColor().equalsIgnoreCase("senior")){
                 target.kickPlayer(ChatColor.RED + "You were kicked by " + player.getDisplayName());

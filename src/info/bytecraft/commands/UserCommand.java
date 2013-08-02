@@ -30,73 +30,69 @@ public class UserCommand extends AbstractCommand
         if (args.length == 3) {
             if ("make".equalsIgnoreCase(args[0])) {
                 Player delegate = Bukkit.getPlayer(args[2]);
-                if(delegate == null){
-                    player.sendNotification(Notification.COMMAND_FAIL);
-                    return true;
-                }
-                BytecraftPlayer target =
-                        plugin.getPlayer(delegate);
-                if (target.isOnline()) {
-                    DBPlayerDAO dbPlayer = null;
-                    Connection conn = null;
-                    try {
-                        conn = ConnectionPool.getConnection();
-                        dbPlayer = new DBPlayerDAO(conn);
+                if (delegate != null) {
+                    BytecraftPlayer target = plugin.getPlayer(delegate);
+                    if (target.isOnline()) {
+                        DBPlayerDAO dbPlayer = null;
+                        Connection conn = null;
+                        try {
+                            conn = ConnectionPool.getConnection();
+                            dbPlayer = new DBPlayerDAO(conn);
 
-                        switch (args[1]) {
-                        case "settler":
-                            target.setSettler(true);
-                            target.setTrusted(true);
-                            target.setNameColor("settler");
-                            plugin.getLogger().info(
-                                    ChatColor.AQUA + "You have made "
-                                            + target.getDisplayName()
-                                            + " a settler");
-                            target.sendMessage(ChatColor.AQUA
-                                    + "You have been made a settler");
-                            break;
-                        case "warned":
-                            target.setWarned(true);
-                            player.sendMessage(ChatColor.RED
-                                    + "You have warned "
-                                    + target.getDisplayName());
-                            target.sendMessage(ChatColor.RED
-                                    + "You have been warned.");
-                            target.setNameColor("warned");
-                            break;
-                        case "hardwarned":
-                            target.setHardWarned(true);
-                            player.sendMessage(ChatColor.RED
-                                    + "You have warned "
-                                    + target.getDisplayName());
-                            target.sendMessage(ChatColor.RED
-                                    + "You have been warned.");
-                            target.setNameColor("warned");
-                        }
+                            switch (args[1]) {
+                            case "settler":
+                                target.setSettler(true);
+                                target.setTrusted(true);
+                                target.setNameColor("settler");
+                                plugin.getLogger().info(
+                                        ChatColor.AQUA + "You have made "
+                                                + target.getDisplayName()
+                                                + " a settler");
+                                target.sendMessage(ChatColor.AQUA
+                                        + "You have been made a settler");
+                                break;
+                            case "warned":
+                                target.setWarned(true);
+                                player.sendMessage(ChatColor.RED
+                                        + "You have warned "
+                                        + target.getDisplayName());
+                                target.sendMessage(ChatColor.RED
+                                        + "You have been warned.");
+                                target.setNameColor("warned");
+                                break;
+                            case "hardwarned":
+                                target.setHardWarned(true);
+                                player.sendMessage(ChatColor.RED
+                                        + "You have warned "
+                                        + target.getDisplayName());
+                                target.sendMessage(ChatColor.RED
+                                        + "You have been warned.");
+                                target.setNameColor("warned");
+                            }
 
-                        dbPlayer.updatePlayerInfo(target);
+                            dbPlayer.updatePlayerInfo(target);
 
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    } finally {
-                        if (conn != null) {
-                            try {
-                                conn.close();
-                            } catch (SQLException e) {
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        } finally {
+                            if (conn != null) {
+                                try {
+                                    conn.close();
+                                } catch (SQLException e) {
+                                }
                             }
                         }
+                        target.setDisplayName(target.getNameColor()
+                                + target.getName());
                     }
-                    target.setDisplayName(target.getNameColor()
-                            + target.getName());
-                }
-                else {
-                    player.sendMessage("No player found by the name of: "
-                            + args[2]);
-                    player.sendNotification(Notification.COMMAND_FAIL);
+                    else {
+                        player.sendMessage("No player found by the name of: "
+                                + args[2]);
+                        player.sendNotification(Notification.COMMAND_FAIL);
+                    }
                 }
             }
         }
-
         return true;
     }
 
@@ -104,9 +100,9 @@ public class UserCommand extends AbstractCommand
     {
         if (args.length == 3) {
             if ("make".equalsIgnoreCase(args[0])) {
-                BytecraftPlayer target =
-                        plugin.getPlayer(Bukkit.getPlayer(args[2]));
-                if (target.isOnline()) {
+                Player delegate = Bukkit.getPlayer(args[2]);
+                if (delegate != null) {
+                    BytecraftPlayer target = plugin.getPlayer(delegate);
                     DBPlayerDAO dbPlayer = null;
                     Connection conn = null;
                     try {
