@@ -342,11 +342,9 @@ public class DBPlayerDAO
     }
 
     public boolean take(BytecraftPlayer player, long toTake)
-            throws SQLException, IllegalArgumentException
+            throws SQLException
     {
-        if(balance(player) - toTake < 0){
-            throw new IllegalArgumentException("Don't try to give more than you have");
-        }
+        if((balance(player) - toTake) < 0)return false;
         PreparedStatement stm = null;
         try {
             stm =
@@ -373,6 +371,47 @@ public class DBPlayerDAO
         NumberFormat nf = NumberFormat.getNumberInstance();
         return ChatColor.GOLD + nf.format(balance(player)) + ChatColor.AQUA
                 + " bytes";
+    }
+    
+    public boolean isBanned(BytecraftPlayer player)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM player WHERE id = ?");
+            stm.setInt(1, player.getId());
+            stm.execute();
+            ResultSet rs = stm.getResultSet();
+            if(rs.next()){
+                return Boolean.valueOf(rs.getString("player_banned"));
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
+        return false;
+    }
+    
+    public void ban(BytecraftPlayer player)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("UPDATE player SET player_banned = true WHERE player_id = ?");
+            stm.setInt(1, player.getId());
+            stm.execute();
+        }catch(SQLException e){
+            
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
     }
 
 }

@@ -27,6 +27,7 @@ CREATE TABLE `player` (
   `player_name` varchar(46) COLLATE utf8_general_ci DEFAULT NULL,
   `player_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `player_wallet` bigint(20) DEFAULT '750',
+  `player_banned` ENUM(`true`, `false`) DEFAULT `false`,
   UNIQUE KEY `uid` (`player_id`),
   KEY `player` (`player_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=44284 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
