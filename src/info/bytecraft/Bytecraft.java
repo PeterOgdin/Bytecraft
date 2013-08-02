@@ -5,24 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import info.bytecraft.api.BytecraftPlayer;
-import info.bytecraft.commands.BlessCommand;
-import info.bytecraft.commands.KickCommand;
-import info.bytecraft.commands.MessageCommand;
-import info.bytecraft.commands.SayCommand;
-import info.bytecraft.commands.UserCommand;
-import info.bytecraft.commands.WalletCommand;
-import info.bytecraft.commands.WarpCommand;
-import info.bytecraft.commands.WhoCommand;
+import info.bytecraft.api.PlayerBannedException;
+import info.bytecraft.commands.*;
 import info.bytecraft.database.DBPlayerDAO;
-import info.bytecraft.listener.BlessListener;
-import info.bytecraft.listener.BytecraftPlayerListener;
-import info.bytecraft.listener.ChatListener;
+import info.bytecraft.listener.*;
 import info.tregmine.database.ConnectionPool;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,12 +31,16 @@ public class Bytecraft extends JavaPlugin
         players = Maps.newHashMap();
 
         for (Player delegate : Bukkit.getOnlinePlayers()) {
-            addPlayer(delegate);
+            try {
+                addPlayer(delegate);
+            } catch (PlayerBannedException e) {}
         }
 
         registerEvents();
         
+        getCommand("ban").setExecutor(new BanCommand(this));
         getCommand("bless").setExecutor(new BlessCommand(this));
+        getCommand("channel").setExecutor(new ChannelCommand(this));
         getCommand("god").setExecutor(new SayCommand(this, "god"));
         getCommand("kick").setExecutor(new KickCommand(this));
         getCommand("message").setExecutor(new MessageCommand(this));
@@ -75,11 +71,15 @@ public class Bytecraft extends JavaPlugin
             player.setDisplayName(player.getNameColor() + player.getName());
             return player;
         }else{
-            return addPlayer(Bukkit.getPlayer(name));
+            try {
+                return addPlayer(Bukkit.getPlayer(name));
+            } catch (PlayerBannedException e) {
+            }
         }
+        return null;
     }
 
-    public BytecraftPlayer addPlayer(Player srcPlayer)
+    public BytecraftPlayer addPlayer(Player srcPlayer) throws PlayerBannedException
     {
         if (players.containsKey(srcPlayer.getName())) {
             return players.get(srcPlayer.getName());
@@ -94,6 +94,10 @@ public class Bytecraft extends JavaPlugin
 
             if (player == null) {
                 player = playerDAO.createPlayer(srcPlayer);
+            }
+            
+            if(playerDAO.isBanned(player)){
+                throw new PlayerBannedException(ChatColor.RED + "You are not allowed on this server");
             }
 
             players.put(player.getName(), player);
