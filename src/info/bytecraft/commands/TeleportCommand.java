@@ -50,7 +50,7 @@ public class TeleportCommand extends AbstractCommand
         }
         Player delegate = Bukkit.getPlayer(args[0]);
         if(delegate != null){
-            final BytecraftPlayer target = plugin.getPlayer(delegate);
+            BytecraftPlayer target = plugin.getPlayer(delegate);
             if(Distance.calc2d(player.getLocation(), target.getLocation()) > maxDistance){
                 if(!player.isAdmin()){
                     player.sendMessage(ChatColor.RED + "You are too far to teleport!");
@@ -60,18 +60,34 @@ public class TeleportCommand extends AbstractCommand
                         if(!player.isAdmin()){
                             player.sendMessage(target.getDisplayName() + ChatColor.RED + " is not accepting teleports right now");
                             target.sendMessage(player.getDisplayName() + ChatColor.RED + " failed at teleporting to you");
+                            return true;
                         }else{
                             TeleportTask task = new TeleportTask(player, target);
                             plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                            return true;
                         }
                     }else{
                         TeleportTask task = new TeleportTask(player, target);
                         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                        return true;
                     }
                 }
             }else{
-                TeleportTask task = new TeleportTask(player, target);
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);
+                if(target.isTeleportBlock()){
+                    if(!player.isAdmin()){
+                        player.sendMessage(target.getDisplayName() + ChatColor.RED + " is not accepting teleports right now");
+                        target.sendMessage(player.getDisplayName() + ChatColor.RED + " failed at teleporting to you");
+                        return true;
+                    }else{
+                        TeleportTask task = new TeleportTask(player, target);
+                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                        return true;
+                    }
+                }else{
+                    TeleportTask task = new TeleportTask(player, target);
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                    return true;
+                }
             }
         }
         return true;
