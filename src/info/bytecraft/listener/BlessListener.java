@@ -100,6 +100,7 @@ public class BlessListener implements Listener
                             player.sendMessage(ChatColor.RED + "Blessed to: " + ChatColor.AQUA + dbBless.getOwner(event.getClickedBlock()));
                             if(!player.isAdmin()){
                                 event.setCancelled(true);
+                                return;
                             }
                         }else{
                             player.sendMessage(ChatColor.AQUA + "Blessed to you");

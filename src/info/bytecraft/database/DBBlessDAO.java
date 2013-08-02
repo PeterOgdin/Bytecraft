@@ -18,61 +18,87 @@ public class DBBlessDAO
     {
         this.conn = conn;
     }
-    
+
     public boolean isBlessed(Block block)
     {
         PreparedStatement stm = null;
-        try{
-            stm = conn.prepareStatement("SELECT * FROM bless WHERE x = ? AND y = ? AND z = ? AND world = ?");
+        try {
+            stm =
+                    conn.prepareStatement("SELECT * FROM bless WHERE x = ? AND y = ? AND z = ? AND world = ?");
             stm.setInt(1, block.getX());
             stm.setInt(2, block.getY());
             stm.setInt(3, block.getZ());
             stm.setString(4, block.getWorld().getName());
-            
+
             stm.execute();
             ResultSet rs = stm.getResultSet();
-            if(rs.next())return true;
-        }catch(SQLException e){
+            if (rs.next())
+                return true;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally{
-            if(stm != null){
-                try{
+        } finally {
+            if (stm != null) {
+                try {
                     stm.close();
-                }catch(SQLException e){}
+                } catch (SQLException e) {
+                }
             }
         }
         return false;
     }
-    
+
     public boolean bless(Block block, BytecraftPlayer owner)
     {
-        return true;
+        PreparedStatement stm = null;
+        try {
+            stm =
+                    conn.prepareStatement("INSERT INTO bless (player_name, x, y, z, world) "
+                            + "VALUES (?, ?, ?, ?, ?)");
+            stm.setString(1, owner.getName());
+            stm.setInt(2, block.getX());
+            stm.setInt(3, block.getY());
+            stm.setInt(4, block.getZ());
+            stm.setString(5, block.getWorld().getName());
+            return stm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
     }
-    
+
     public String getOwner(Block block)
     {
-        if(!isBlessed(block))return null;
+        if (!isBlessed(block))
+            return null;
         PreparedStatement stm = null;
-        try{
-            stm = conn.prepareStatement("SELECT * FROM bless WHERE x = ? AND y = ? AND z = ? AND world = ?");
+        try {
+            stm =
+                    conn.prepareStatement("SELECT * FROM bless WHERE x = ? AND y = ? AND z = ? AND world = ?");
             stm.setInt(1, block.getX());
             stm.setInt(2, block.getY());
             stm.setInt(3, block.getZ());
             stm.setString(4, block.getWorld().getName());
-            
+
             stm.execute();
-            
+
             ResultSet rs = stm.getResultSet();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getString("player_name");
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally{
-            if(stm != null){
-                try{
+        } finally {
+            if (stm != null) {
+                try {
                     stm.close();
-                }catch(SQLException e){}
+                } catch (SQLException e) {
+                }
             }
         }
         return null;
