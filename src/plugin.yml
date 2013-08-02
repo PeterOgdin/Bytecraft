@@ -4,9 +4,15 @@ main: info.bytecraft.Bytecraft
 description: The plugin for Bytecraft
 version: 0.0.1
 commands:
+    ban:
+        description: Ban a player
+        usage: /<command> <player>
     bless:
         description: Bless a block for a player
         usage: /<command> <player>
+    channel:
+        description: Change your chat channel
+        usage: /<command> <channel>
     god:
         description: Send a message as the default red god
         usage: /<command> <message>
