@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class BytecraftPlayer extends PlayerDelegate
@@ -70,6 +71,9 @@ public class BytecraftPlayer extends PlayerDelegate
     private String color;
     private String godColor;
     private String chatChannel = "GLOBAL";
+    
+    private Block fillBlock1;
+    private Block fillBlock2;
     
     private BytecraftPlayer blessTarget;
 
@@ -294,6 +298,26 @@ public class BytecraftPlayer extends PlayerDelegate
     public void sendNotification(Notification notif)
     {
         this.playSound(getLocation(), notif.getSound(), 2F, 1F);
+    }
+
+    public Block getFillBlock1()
+    {
+        return fillBlock1;
+    }
+
+    public void setFillBlock1(Block fillBlock1)
+    {
+        this.fillBlock1 = fillBlock1;
+    }
+
+    public Block getFillBlock2()
+    {
+        return fillBlock2;
+    }
+
+    public void setFillBlock2(Block fillBlock2)
+    {
+        this.fillBlock2 = fillBlock2;
     }
     
 }
