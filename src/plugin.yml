@@ -13,9 +13,19 @@ commands:
     channel:
         description: Change your chat channel
         usage: /<command> <channel>
+    fill:
+        description: Fill some blocks
+        usage: /<command> <material>
+    give:
+        description: Give another player an item
+        usage: /<command> <player> <id|name> <amount> <data>
     god:
         description: Send a message as the default red god
         usage: /<command> <message>
+    item:
+        description: Give yourself an item
+        usage: /<command> <id|name> <amount> <data>
+        aliases: [i]
     kick:
         description: Kick a player
         usage: /<command> <player>

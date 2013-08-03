@@ -41,7 +41,10 @@ public class Bytecraft extends JavaPlugin
         getCommand("ban").setExecutor(new BanCommand(this));
         getCommand("bless").setExecutor(new BlessCommand(this));
         getCommand("channel").setExecutor(new ChannelCommand(this));
+        getCommand("fill").setExecutor(new FillCommand(this));
+        getCommand("give").setExecutor(new GiveCommand(this));
         getCommand("god").setExecutor(new SayCommand(this, "god"));
+        getCommand("item").setExecutor(new ItemCommand(this));
         getCommand("kick").setExecutor(new KickCommand(this));
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
@@ -58,6 +61,7 @@ public class Bytecraft extends JavaPlugin
         pm.registerEvents(new ChatListener(this), this);
         pm.registerEvents(new BytecraftPlayerListener(this), this);
         pm.registerEvents(new BlessListener(this), this);
+        pm.registerEvents(new FillListener(this), this);
     }
 
     public BytecraftPlayer getPlayer(Player player)
