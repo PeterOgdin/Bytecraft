@@ -1,5 +1,6 @@
 package info.bytecraft.api;
 
+import info.bytecraft.blockfill.Fill;
 import info.bytecraft.database.DBPlayerDAO;
 import info.tregmine.database.ConnectionPool;
 
@@ -74,6 +75,7 @@ public class BytecraftPlayer extends PlayerDelegate
     
     private Block fillBlock1;
     private Block fillBlock2;
+    private Fill lastFill;
     
     private BytecraftPlayer blessTarget;
 
@@ -318,6 +320,16 @@ public class BytecraftPlayer extends PlayerDelegate
     public void setFillBlock2(Block fillBlock2)
     {
         this.fillBlock2 = fillBlock2;
+    }
+
+    public void setLastFill(Fill fill)
+    {
+        this.lastFill = fill;
+    }
+    
+    public Fill getLastFill()
+    {
+        return this.lastFill;
     }
     
 }
