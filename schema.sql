@@ -38,6 +38,26 @@ CREATE TABLE IF NOT EXISTS `bless` (
 
 -- --------------------------------------------------------
 
+---
+--- Table stucture for table `fill_log`
+--- 
+
+CREATE TABLE IF NOT EXISTS `fill_log` (
+  `fill_id` int(255) NOT NULL AUTO_INCREMENT,
+  `player_name` varchar(255) NOT NULL,
+  `rect_x1` int(32) NOT NULL,
+  `rect_y1` int(32) NOT NULL,
+  `rect_z1` int(32) NOT NULL,
+  `rect_x2` int(32) NOT NULL,
+  `rect_y2` int(32) NOT NULL,
+  `rect_z2` int(32) NOT NULL,
+  `material` varchar(32) NOT NULL,
+  UNIQUE KEY `id` (`fill_id`),
+  PRIMARY KEY `player` (`player_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `player`
 --
@@ -50,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `player_banned` enum('true','false') NOT NULL DEFAULT 'false',
   UNIQUE KEY `uid` (`player_id`),
   KEY `player` (`player_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -119,6 +139,21 @@ CREATE TABLE IF NOT EXISTS `player_property` (
   `property_value` varchar(255) DEFAULT NULL,
   `property_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`player_id`,`property_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaction_log`
+--
+
+CREATE TABLE IF NOT EXISTS `transaction_log` (
+  `transaction_id` int(32) NOT NULL AUTO_INCREMENT,
+  `sender_name` varchar(32) NOT NULL,
+  `reciever_name` varchar(32) NOT NULL,
+  `amount` bigint(20) NOT NULL,
+  UNIQUE KEY `id` (`transaction_id`),
+  PRIMARY KEY `sender` (`sender_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
