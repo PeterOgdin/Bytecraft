@@ -2,12 +2,16 @@ package info.bytecraft.commands;
 
 import static org.bukkit.ChatColor.DARK_AQUA;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
@@ -67,6 +71,12 @@ public class ItemCommand extends AbstractCommand
         }
 
         ItemStack item = new ItemStack(materialId, amount, (byte) data);
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = new ArrayList<String>();
+        lore.add(ChatColor.YELLOW + "SPAWNED");
+        lore.add(ChatColor.YELLOW + "By " + player.getDisplayName());
+        meta.setLore(lore);
+        item.setItemMeta(meta);
         if (item.getType() == Material.MONSTER_EGG || item.getType() == Material.NAME_TAG) {
             return false;
         }
