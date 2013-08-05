@@ -35,6 +35,7 @@ public class Fill
     }
     
     public int fill(){
+        blocks.clear();
         int i = 0;
         int xMax = Math.max(block1.getX(), block2.getX());
         int xMin = Math.min(block1.getX(), block2.getX());
@@ -83,6 +84,7 @@ public class Fill
     
     public int replace(Material to)
     {
+        blocks.clear();
         int i = 0;
         int xMax = Math.max(block1.getX(), block2.getX());
         int xMin = Math.min(block1.getX(), block2.getX());
@@ -102,6 +104,7 @@ public class Fill
                         Location loc = new Location(world, x, y, z);
                         if(!dbBless.isBlessed(loc.getBlock())){
                             if(loc.getBlock().getType() == material){
+                                blocks.put(loc, loc.getBlock().getType());
                                 world.getBlockAt(loc).setType(to);
                                 i++;
                             }
