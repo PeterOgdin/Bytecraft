@@ -153,7 +153,6 @@ CREATE TABLE IF NOT EXISTS `transaction_log` (
   `reciever_name` varchar(32) NOT NULL,
   `amount` bigint(20) NOT NULL,
   UNIQUE KEY `id` (`transaction_id`),
-  PRIMARY KEY `sender` (`sender_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
