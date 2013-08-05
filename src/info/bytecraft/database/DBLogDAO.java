@@ -53,7 +53,7 @@ public class DBLogDAO
             stm.setLong(3, amount);
             stm.execute();
         }catch(SQLException e){
-            
+            throw new RuntimeException(e);
         }finally{
             if(stm != null){
                 try {
