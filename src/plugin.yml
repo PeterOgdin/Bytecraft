@@ -13,9 +13,15 @@ commands:
     channel:
         description: Change your chat channel
         usage: /<command> <channel>
+    creative:
+        description: Change your gamemode to creative
+        usage: /<command>
     fill:
         description: Fill some blocks
         usage: /<command> <material>
+    gamemode:
+        description: Change your gamemode
+        usage: /<command> [creative|survival]
     give:
         description: Give another player an item
         usage: /<command> <player> <id|name> <amount> <data>
@@ -36,6 +42,9 @@ commands:
     say:
         description: Send a message as god
         usage: /<command> <message>
+    survival:
+        description: Change your gamemode to survival
+        usage: /<command>
     teleport:
         description: Teleport to a player
         usage: /<command> <player>
