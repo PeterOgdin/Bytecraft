@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.database.DBLogDAO;
 import info.bytecraft.database.DBPlayerDAO;
 import info.tregmine.database.ConnectionPool;
 
@@ -50,11 +51,13 @@ public class WalletCommand extends AbstractCommand
                     try {
                         conn = ConnectionPool.getConnection();
                         DBPlayerDAO dbPlayer = new DBPlayerDAO(conn);
+                        DBLogDAO dbLog = new DBLogDAO(conn);
                         if (amount > 0) {
                             if(dbPlayer.take(player, amount)){
                                 dbPlayer.give(target, amount);
                                 player.sendMessage(ChatColor.AQUA + "You gave " + target.getDisplayName() + " " + formatCurrency(amount));
                                 target.sendMessage(player.getDisplayName() + ChatColor.AQUA + " gave you " + formatCurrency(amount));
+                                dbLog.insertTransactionLog(player, target, amount);
                             }
                         }
                     } catch (SQLException e) {

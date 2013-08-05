@@ -41,4 +41,25 @@ public class DBLogDAO
             }
         }
     }
+    
+    public void insertTransactionLog(BytecraftPlayer giver, BytecraftPlayer reciever, long amount)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("INSERT INTO transaction_log " +
+            		"(sender_name, reciever_name, amount) VALUES (?, ?, ?)");
+            stm.setString(1, giver.getName());
+            stm.setString(2, reciever.getName());
+            stm.setLong(3, amount);
+            stm.execute();
+        }catch(SQLException e){
+            
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
 }
