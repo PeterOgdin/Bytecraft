@@ -39,7 +39,11 @@ public class SayCommand extends AbstractCommand
             Bukkit.broadcastMessage(ChatColor.RED + "<GOD> " + ChatColor.LIGHT_PURPLE + argsToMessage(args));
         }
         for(BytecraftPlayer other: plugin.getOnlinePlayers()){
+            if(other.isAdmin()){
+                other.sendMessage(ChatColor.AQUA + "/say used by " + player.getDisplayName());
+            }
             other.sendNotification(Notification.SERVER_MESSAGE);
+            plugin.getLogger().info("[COMMAND] /say used by " + player.getName());
         }
         return true;
     }
