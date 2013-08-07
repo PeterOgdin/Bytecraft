@@ -42,6 +42,9 @@ commands:
     say:
         description: Send a message as god
         usage: /<command> <message>
+    summon:
+        description: Summon a player to your location
+        usage: /<command> <player>
     survival:
         description: Change your gamemode to survival
         usage: /<command>
