@@ -50,6 +50,7 @@ public class Bytecraft extends JavaPlugin
         getCommand("kick").setExecutor(new KickCommand(this));
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
+        getCommand("summon").setExecutor(new SummonCommand(this));
         getCommand("survival").setExecutor(new GameModeCommand(this, "survival"));
         getCommand("teleport").setExecutor(new TeleportCommand(this));
         getCommand("user").setExecutor(new UserCommand(this));
@@ -125,6 +126,24 @@ public class Bytecraft extends JavaPlugin
 
     public void removePlayer(Player player)
     {
+        Connection conn = null;
+        DBPlayerDAO dbPlayer = null;
+        
+        try{
+            conn = ConnectionPool.getConnection();
+            dbPlayer = new DBPlayerDAO(conn);
+            
+            BytecraftPlayer bPlayer = getPlayer(player);
+            dbPlayer.updatePlayerInfo(bPlayer);
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
         this.players.remove(player.getName());
     }
 
