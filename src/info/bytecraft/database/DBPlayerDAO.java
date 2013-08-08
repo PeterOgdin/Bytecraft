@@ -1,6 +1,7 @@
 package info.bytecraft.database;
 
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.api.Rank;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,57 +21,17 @@ public class DBPlayerDAO
         this.conn = conn;
     }
 
-    public BytecraftPlayer getPlayer(int id) throws SQLException
-    {
-        BytecraftPlayer player;
-
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt =
-                    conn.prepareStatement("SELECT * FROM player "
-                            + "WHERE player_id = ?");
-            stmt.setInt(1, id);
-            stmt.execute();
-
-            rs = stmt.getResultSet();
-            if (!rs.next()) {
-                return null;
-            }
-
-            player = new BytecraftPlayer(rs.getString("player_name"));
-            player.setId(rs.getInt("player_id"));
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
-
-        loadSettings(player);
-        return player;
-    }
-
-    public BytecraftPlayer getPlayer(Player player) throws SQLException
+    public BytecraftPlayer getPlayer(Player player)
     {
         return getPlayer(player.getName(), player);
     }
 
-    public BytecraftPlayer getPlayer(String name) throws SQLException
+    public BytecraftPlayer getPlayer(String name)
     {
         return getPlayer(name, null);
     }
 
     public BytecraftPlayer getPlayer(String name, Player wrap)
-            throws SQLException
     {
         BytecraftPlayer player;
         if (wrap != null) {
@@ -95,7 +56,10 @@ public class DBPlayerDAO
             }
 
             player.setId(rs.getInt("player_id"));
-        } finally {
+            player.setRank(Rank.getRank(rs.getString("player_rank")));
+        } catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally {
             if (rs != null) {
                 try {
                     rs.close();
@@ -111,11 +75,10 @@ public class DBPlayerDAO
         }
 
         loadSettings(player);
-
         return player;
     }
 
-    private void loadSettings(BytecraftPlayer player) throws SQLException
+    private void loadSettings(BytecraftPlayer player)
     {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -130,38 +93,15 @@ public class DBPlayerDAO
             while (rs.next()) {
                 String key = rs.getString("property_key");
                 String value = rs.getString("property_value");
-                if ("admin".equals(key)) {
-                    player.setAdmin(Boolean.valueOf(value));
-                }
-                else if ("builder".equals(key)) {
-                    player.setBuilder(Boolean.valueOf(value));
-                }
-                else if ("invisible".equals(key)) {
-                    player.setInvisible(Boolean.valueOf(value));
-                }
-                else if ("donator".equals(key)) {
-                    player.setDonator(Boolean.valueOf(value));
-                }
-                else if ("trusted".equals(key)) {
-                    player.setTrusted(Boolean.valueOf(value));
-                }
-                else if ("member".equals(key)) {
-                    player.setMember(Boolean.valueOf(value));
-                }
-                else if ("tpblock".equals(key)) {
+                if("god_color".equals(key)){
+                    player.setGodColor(value);
+                }else if("tpblock".equalsIgnoreCase(key)){
                     player.setTeleportBlock(Boolean.valueOf(value));
                 }
-                else if ("guardian".equals(key)) {
-                    player.setGuard(Boolean.valueOf(value));
-                }
-                else if ("color".equals(key)) {
-                    player.setNameColor(value);
-                }
-                else if("god_color".equals(key)){
-                    player.setGodColor(value);
-                }
             }
-        } finally {
+        } catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally {
             if (rs != null) {
                 try {
                     rs.close();
@@ -197,6 +137,7 @@ public class DBPlayerDAO
             }
 
             player.setId(rs.getInt(1));
+            player.setRank(Rank.NEWCOMER);
         } finally {
             if (rs != null) {
                 try {
@@ -211,16 +152,6 @@ public class DBPlayerDAO
                 }
             }
         }
-        updateProperty(player, "color", "newcomer");
-        updateProperty(player, "admin", false);
-        updateProperty(player, "builder", false);
-        updateProperty(player, "donator", false);
-        updateProperty(player, "trusted", false);
-        updateProperty(player, "member", false);
-        updateProperty(player, "settler", false);
-        updateProperty(player, "guard", false);
-        updateProperty(player, "warned", false);
-        updateProperty(player, "hard_warned", false);
         updateProperty(player, "tpblock", false);
         updateProperty(player, "invisible", false);
         updateProperty(player, "god_color", "red");
@@ -228,24 +159,30 @@ public class DBPlayerDAO
     }
 
     public void updatePlayerPermissions(BytecraftPlayer player)
-            throws SQLException
     {
-        updateProperty(player, "admin", player.isAdmin());
-        updateProperty(player, "builder", player.isBuilder());
-        updateProperty(player, "donator", player.isDonator());
-        updateProperty(player, "trusted", player.isTrusted());
-        updateProperty(player, "member", player.isMember());
-        updateProperty(player, "guard", player.isGuard());
-        updateProperty(player, "settler", player.isSettler());
-        updateProperty(player, "warned", player.isWarned());
-        updateProperty(player, "hard_warned", player.isHardWarned());
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("UPDATE player SET player_rank = ? WHERE player_id = ?");
+            stm.setString(1, player.getRank().toString().toLowerCase());
+            stm.setInt(2, player.getId());
+            stm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void updatePlayerInfo(BytecraftPlayer player) throws SQLException
     {
         updateProperty(player, "invisible", player.isInvisible());
         updateProperty(player, "tpblock", player.isTeleportBlock());
-        updateProperty(player, "color", player.getColor());
     }
 
     public void updateProperty(BytecraftPlayer player, String key, boolean value)
@@ -316,7 +253,7 @@ public class DBPlayerDAO
         return 0;
     }
 
-    public boolean give(BytecraftPlayer player, long toAdd) throws SQLException
+    public boolean give(BytecraftPlayer player, long toAdd)
     {
         PreparedStatement stm = null;
         try {
@@ -342,7 +279,6 @@ public class DBPlayerDAO
     }
 
     public boolean take(BytecraftPlayer player, long toTake)
-            throws SQLException
     {
         if((balance(player) - toTake) < 0)return false;
         PreparedStatement stm = null;
