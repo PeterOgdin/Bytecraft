@@ -26,7 +26,7 @@ public class TeleportCommand extends AbstractCommand
         {
             player.teleport(target.getLocation());
             
-            player.setNoDamageTicks(200);
+            player.setNoDamageTicks(1000);
             if(!player.isAdmin()){
                 target.sendMessage(player.getDisplayName() + ChatColor.AQUA + " has teleported to you");
             }
@@ -44,9 +44,9 @@ public class TeleportCommand extends AbstractCommand
         if(args.length != 1)return true;
         int maxDistance = 0;
         if(!player.isDonator()){
-            maxDistance = 100;
+            maxDistance = 300;
         }else{
-            maxDistance = 1000;
+            maxDistance = 10000;
         }
         Player delegate = Bukkit.getPlayer(args[0]);
         if(delegate != null){
@@ -55,37 +55,27 @@ public class TeleportCommand extends AbstractCommand
                 if(!player.isAdmin()){
                     player.sendMessage(ChatColor.RED + "You are too far to teleport!");
                     return true;
-                }else{
-                    if(target.isTeleportBlock()){
-                        if(!player.isAdmin()){
-                            player.sendMessage(target.getDisplayName() + ChatColor.RED + " is not accepting teleports right now");
-                            target.sendMessage(player.getDisplayName() + ChatColor.RED + " failed at teleporting to you");
-                            return true;
-                        }else{
-                            TeleportTask task = new TeleportTask(player, target);
-                            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
-                            return true;
-                        }
-                    }else{
-                        TeleportTask task = new TeleportTask(player, target);
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
-                        return true;
-                    }
+                }else{//admin teleport
+                    TeleportTask task = new TeleportTask(player, target);
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);
+                    player.sendMessage(ChatColor.AQUA + "Teleporting to " + target.getDisplayName());
                 }
             }else{
-                if(target.isTeleportBlock()){
-                    if(!player.isAdmin()){
+                if(target.isTeleportBlock()){//teleport block
+                    if(!player.isAdmin()){//not admin
                         player.sendMessage(target.getDisplayName() + ChatColor.RED + " is not accepting teleports right now");
                         target.sendMessage(player.getDisplayName() + ChatColor.RED + " failed at teleporting to you");
                         return true;
-                    }else{
+                    }else{//admin override
                         TeleportTask task = new TeleportTask(player, target);
                         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                        player.sendMessage(ChatColor.AQUA + "Teleporting to " + target.getDisplayName());
                         return true;
                     }
-                }else{
+                }else{//non teleport block
                     TeleportTask task = new TeleportTask(player, target);
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                    player.sendMessage(ChatColor.AQUA + "Teleporting to " + target.getDisplayName());
                     return true;
                 }
             }
