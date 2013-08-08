@@ -18,26 +18,6 @@ public class BytecraftPlayer extends PlayerDelegate
 {
 
     @SuppressWarnings("serial")
-    private final static Map<String, ChatColor> COLORS =
-            new HashMap<String, ChatColor>() {
-                {
-                    put("admin", ChatColor.RED);
-                    put("child", ChatColor.AQUA);
-                    put("donator", ChatColor.GOLD);
-                    put("builder", ChatColor.YELLOW);
-                    put("mentor", ChatColor.DARK_AQUA);
-                    put("pink", ChatColor.LIGHT_PURPLE);
-                    put("guard", ChatColor.BLUE);
-                    put("coder", ChatColor.DARK_PURPLE);
-                    put("settler", ChatColor.GREEN);
-                    put("member", ChatColor.DARK_GREEN);
-                    put("senior", ChatColor.DARK_RED);
-                    put("warned", ChatColor.GRAY);
-                    put("newcomer", ChatColor.WHITE);
-                }
-            };
-            
-    @SuppressWarnings("serial")
     private static final Map<String, ChatColor> GOD_COLORS = 
         new HashMap<String, ChatColor>(){
             {
@@ -45,7 +25,7 @@ public class BytecraftPlayer extends PlayerDelegate
                 put("aqua", ChatColor.AQUA);
                 put("gold", ChatColor.GOLD);
                 put("yellow", ChatColor.YELLOW);
-                put("dark_aquar", ChatColor.DARK_AQUA);
+                put("dark_aqua", ChatColor.DARK_AQUA);
                 put("pink", ChatColor.LIGHT_PURPLE);
                 put("purple", ChatColor.DARK_PURPLE);
                 put("green", ChatColor.GREEN);
@@ -56,20 +36,11 @@ public class BytecraftPlayer extends PlayerDelegate
     };
 
     private int id = 0;
+    private Rank rank;
 
-    private boolean admin;
-    private boolean builder;
-    private boolean trusted;
     private boolean invisible;
-    private boolean donator;
-    private boolean member;
     private boolean tpblock;
-    private boolean guard;
-    private boolean settler;
-    private boolean warned;
-    private boolean hardwarned;
 
-    private String color;
     private String godColor;
     private String chatChannel = "GLOBAL";
     
@@ -98,35 +69,15 @@ public class BytecraftPlayer extends PlayerDelegate
     {
         this.id = id;
     }
-
-    public void setAdmin(boolean value)
+    
+    public Rank getRank()
     {
-        this.admin = value;
+        return this.rank;
     }
-
-    public boolean isAdmin()
+    
+    public void setRank(Rank rank)
     {
-        return admin;
-    }
-
-    public boolean isBuilder()
-    {
-        return this.builder;
-    }
-
-    public void setBuilder(boolean builder)
-    {
-        this.builder = builder;
-    }
-
-    public boolean isTrusted()
-    {
-        return trusted;
-    }
-
-    public void setTrusted(boolean trusted)
-    {
-        this.trusted = trusted;
+        this.rank = rank;
     }
 
     public boolean isInvisible()
@@ -139,36 +90,6 @@ public class BytecraftPlayer extends PlayerDelegate
         this.invisible = invisible;
     }
 
-    public ChatColor getNameColor()
-    {
-        return COLORS.get(color) == null ? ChatColor.WHITE : COLORS.get(color);
-    }
-
-    public void setNameColor(String v)
-    {
-        this.color = v;
-    }
-
-    public boolean isDonator()
-    {
-        return this.donator;
-    }
-
-    public void setDonator(boolean donator)
-    {
-        this.donator = donator;
-    }
-
-    public boolean isMember()
-    {
-        return member;
-    }
-
-    public void setMember(boolean member)
-    {
-        this.member = member;
-    }
-
     public boolean isTeleportBlock()
     {
         return tpblock;
@@ -177,51 +98,6 @@ public class BytecraftPlayer extends PlayerDelegate
     public void setTeleportBlock(boolean tpblock)
     {
         this.tpblock = tpblock;
-    }
-
-    public boolean isGuard()
-    {
-        return guard;
-    }
-
-    public void setGuard(boolean guard)
-    {
-        this.guard = guard;
-    }
-
-    public String getColor()
-    {
-        return color;
-    }
-
-    public boolean isSettler()
-    {
-        return settler;
-    }
-
-    public void setSettler(boolean settler)
-    {
-        this.settler = settler;
-    }
-
-    public boolean isWarned()
-    {
-        return warned;
-    }
-
-    public void setWarned(boolean warned)
-    {
-        this.warned = warned;
-    }
-
-    public boolean isHardWarned()
-    {
-        return hardwarned;
-    }
-
-    public void setHardWarned(boolean hardwarned)
-    {
-        this.hardwarned = hardwarned;
     }
 
     public String getChatChannel()
@@ -330,6 +206,31 @@ public class BytecraftPlayer extends PlayerDelegate
     public Fill getLastFill()
     {
         return this.lastFill;
+    }
+
+    public boolean isAdmin()
+    {
+        return (this.rank == Rank.ADMIN || this.rank == Rank.SENIOR_ADMIN);
+    }
+    
+    public boolean isModerator()
+    {
+        return (isAdmin() || this.rank == Rank.GAURD);
+    }
+    
+    public boolean canFill()
+    {
+        return (isAdmin() || this.rank == Rank.BUILDER);
+    }
+    
+    public boolean isDonator()
+    {
+        return (isModerator() || this.rank == Rank.DONATOR);
+    }
+    
+    public boolean isMentor()
+    {
+        return (isModerator() || this.rank == Rank.MENTOR);
     }
     
 }

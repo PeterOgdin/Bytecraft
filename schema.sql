@@ -20,12 +20,6 @@ SET time_zone = "+00:00";
 -- Database: `bytecraft`
 --
 
--- --------------------------------------------------------
-
---
--- Table structure for table `bless`
---
-
 CREATE TABLE IF NOT EXISTS `bless` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `player_name` varchar(32) NOT NULL,
@@ -35,12 +29,6 @@ CREATE TABLE IF NOT EXISTS `bless` (
   `world` varchar(32) NOT NULL DEFAULT 'world',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
----
---- Table stucture for table `fill_log`
---- 
 
 DROP TABLE IF EXISTS `fill_log`;
 
@@ -52,9 +40,6 @@ CREATE TABLE IF NOT EXISTS `fill_log` (
   `material` varchar(32) NOT NULL,
   UNIQUE KEY `id` (`fill_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
--- --------------------------------------------------------
-
 
 CREATE TABLE IF NOT EXISTS `paper_log` (
   `paper_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -68,9 +53,7 @@ CREATE TABLE IF NOT EXISTS `paper_log` (
   unique key `id` (`paper_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=44258;
 
---
--- Table structure for table `player`
---
+DROP TABLE IF EXISTS `player`;
 
 CREATE TABLE IF NOT EXISTS `player` (
   `player_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -78,15 +61,11 @@ CREATE TABLE IF NOT EXISTS `player` (
   `player_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `player_wallet` bigint(20) DEFAULT '750',
   `player_banned` enum('true','false') NOT NULL DEFAULT 'false',
+  `player_rank` enum('warned', 'hard_warned', 'newcomer', 'settler', 
+  'member', 'mentor', 'donator', 'gaurd', 'builder', 'admin', 'senior_admin') NOT NULL DEFAULT 'newcomer',
   UNIQUE KEY `uid` (`player_id`),
   KEY `player` (`player_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `player_chatlog`
---
 
 CREATE TABLE IF NOT EXISTS `player_chatlog` (
   `chatlog_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -96,12 +75,6 @@ CREATE TABLE IF NOT EXISTS `player_chatlog` (
   `chatlog_message` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`chatlog_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `player_home`
---
 
 CREATE TABLE IF NOT EXISTS `player_home` (
   `home_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -118,13 +91,6 @@ CREATE TABLE IF NOT EXISTS `player_home` (
   KEY `player_id` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-
--- --------------------------------------------------------
-
---
--- Table structure for table `player_property`
---
-
 CREATE TABLE IF NOT EXISTS `player_property` (
   `player_id` int(10) unsigned NOT NULL DEFAULT '0',
   `property_key` varchar(255) NOT NULL DEFAULT '',
@@ -133,25 +99,13 @@ CREATE TABLE IF NOT EXISTS `player_property` (
   PRIMARY KEY (`player_id`,`property_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `transaction_log`
---
-
 CREATE TABLE IF NOT EXISTS `transaction_log` (
   `transaction_id` int(32) NOT NULL AUTO_INCREMENT,
   `sender_name` varchar(32) NOT NULL,
   `reciever_name` varchar(32) NOT NULL,
   `amount` bigint(20) NOT NULL,
-  UNIQUE KEY `id` (`transaction_id`),
+  UNIQUE KEY `id` (`transaction_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `warps`
---
 
 CREATE TABLE IF NOT EXISTS `warps` (
   `name` varchar(45) CHARACTER SET latin1 NOT NULL,
@@ -160,16 +114,10 @@ CREATE TABLE IF NOT EXISTS `warps` (
   `z` double NOT NULL,
   `pitch` float NOT NULL,
   `yaw` float NOT NULL,
-  `world` varchar(16) CHARACTER SET latin1 NOT NULL COMMENT 'added for multi world support',
+  `world` varchar(16) CHARACTER SET latin1 NOT NULL,
   UNIQUE KEY `name.uniqe` (`name`),
   KEY `name-index` (`name`,`x`,`y`,`z`,`pitch`,`yaw`,`world`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `zone`
---
 
 CREATE TABLE IF NOT EXISTS `zone` (
   `zone_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -188,12 +136,6 @@ CREATE TABLE IF NOT EXISTS `zone` (
   UNIQUE KEY `name` (`zone_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `zone_lot`
---
-
 CREATE TABLE IF NOT EXISTS `zone_lot` (
   `lot_id` int(10) NOT NULL AUTO_INCREMENT,
   `zone_id` int(10) NOT NULL,
@@ -206,23 +148,11 @@ CREATE TABLE IF NOT EXISTS `zone_lot` (
   PRIMARY KEY (`lot_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `zone_lotuser`
---
-
 CREATE TABLE IF NOT EXISTS `zone_lotuser` (
   `lot_id` int(10) NOT NULL DEFAULT '0',
   `user_id` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`lot_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `zone_rect`
---
 
 CREATE TABLE IF NOT EXISTS `zone_rect` (
   `rect_id` int(10) NOT NULL AUTO_INCREMENT,
@@ -235,11 +165,6 @@ CREATE TABLE IF NOT EXISTS `zone_rect` (
   KEY `zone_id` (`zone_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `zone_user`
---
 
 CREATE TABLE IF NOT EXISTS `zone_user` (
   `zone_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -247,6 +172,7 @@ CREATE TABLE IF NOT EXISTS `zone_user` (
   `user_perm` enum('owner','maker','allowed','banned') NOT NULL DEFAULT 'allowed',
   PRIMARY KEY (`zone_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

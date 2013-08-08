@@ -15,7 +15,7 @@ public class GameModeCommand extends AbstractCommand
     
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if(!player.isAdmin() && !player.isBuilder())return true;
+        if(!player.canFill())return true;
         if("gamemode".equalsIgnoreCase(getCommand())){
             if(args.length == 0){
                 if(player.getGameMode() == GameMode.CREATIVE){

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.PlayerBannedException;
+import info.bytecraft.api.Rank;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,18 +39,16 @@ public class BytecraftPlayerListener implements Listener
     {
         event.setJoinMessage(null);
         BytecraftPlayer player = plugin.getPlayer(event.getPlayer());
-        if (player.isAdmin() && player.isInvisible()) {
+        if (player.getRank() == Rank.SENIOR_ADMIN && player.isInvisible()) {
             for (BytecraftPlayer other : plugin.getOnlinePlayers()) {
-                if (!other.isAdmin()) {
+                if (other.getRank() != Rank.SENIOR_ADMIN) {
                     other.hidePlayer(player.getDelegate());
-                }
-                else {
+                } else {
                     other.sendMessage(player.getDisplayName() + ChatColor.RED
                             + " has joined invisible");
                 }
             }
-        }
-        else {
+        } else {
             Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Welcome "
                     + player.getDisplayName() + ChatColor.DARK_AQUA
                     + " to bytecraft!");
@@ -69,6 +68,12 @@ public class BytecraftPlayerListener implements Listener
     @EventHandler
     public void onQuit(PlayerQuitEvent event)
     {
+        BytecraftPlayer player = plugin.getPlayer(event.getPlayer());
+        if(player.isInvisible()){
+            event.setQuitMessage(null);
+            plugin.removePlayer(event.getPlayer());
+            return;
+        }
         event.setQuitMessage(plugin.getPlayer(event.getPlayer())
                 .getDisplayName() + ChatColor.BLUE + " has left the game");
         plugin.removePlayer(event.getPlayer());

@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.api.Rank;
 import info.bytecraft.database.DBPlayerDAO;
 import info.tregmine.database.ConnectionPool;
 
@@ -20,7 +21,7 @@ public class VanishCommand extends AbstractCommand
     
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if(player.isAdmin() && player.getColor().equalsIgnoreCase("senior")){//seniors only
+        if(player.getRank() == Rank.SENIOR_ADMIN){//seniors only
             if(args.length == 0){
                 Connection conn = null;
                 DBPlayerDAO dbPlayer = null;
@@ -37,7 +38,7 @@ public class VanishCommand extends AbstractCommand
                     }else{
                         player.setInvisible(true);
                         for(BytecraftPlayer other: plugin.getOnlinePlayers()){
-                            if(other.isAdmin() && other.getColor().equalsIgnoreCase("senior")){
+                            if(other.getRank() == Rank.SENIOR_ADMIN){
                                 continue;
                             }
                             other.hidePlayer(player.getDelegate());

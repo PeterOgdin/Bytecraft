@@ -16,43 +16,46 @@ public class KickCommand extends AbstractCommand
     {
         super(instance, "kick");
     }
-    
+
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if(!player.isAdmin() || !player.isGuard()){
+        if (!player.isModerator()) {
             player.sendNotification(Notification.COMMAND_FAIL);
             return true;
         }
-        
-        if(args.length != 1){
+
+        if (args.length != 1) {
             player.sendNotification(Notification.COMMAND_FAIL);
             return true;
         }
-        
+
         Player delegate = Bukkit.getPlayer(args[0]);
-        if(delegate != null){
+        if (delegate != null) {
             BytecraftPlayer target = plugin.getPlayer(delegate);
-            if(!target.getColor().equalsIgnoreCase("senior")){
-                target.kickPlayer(ChatColor.RED + "You were kicked by " + player.getDisplayName());
-                Bukkit.broadcastMessage(target.getDisplayName() + ChatColor.RED + " was kicked by " + player.getDisplayName());
-            }
+            target.kickPlayer(ChatColor.RED + "You were kicked by "
+                    + player.getDisplayName());
+            Bukkit.broadcastMessage(target.getDisplayName() + ChatColor.RED
+                    + " was kicked by " + player.getDisplayName());
         }
-        
+
         return true;
     }
-    
+
     public boolean handleOther(Server server, String[] args)
     {
-        if(args.length != 1)return true;
+        if (args.length != 1)
+            return true;
         Player delegate = server.getPlayer(args[0]);
-        
-        if(delegate != null){
+
+        if (delegate != null) {
             BytecraftPlayer target = plugin.getPlayer(delegate);
-            
-            target.kickPlayer(ChatColor.RED + "You were kicked by " + ChatColor.BLUE + "GOD");
-            Bukkit.broadcastMessage(target.getDisplayName() + ChatColor.RED + " was kicked by " + ChatColor.BLUE + "GOD");
+
+            target.kickPlayer(ChatColor.RED + "You were kicked by "
+                    + ChatColor.BLUE + "GOD");
+            Bukkit.broadcastMessage(target.getDisplayName() + ChatColor.RED
+                    + " was kicked by " + ChatColor.BLUE + "GOD");
         }
-        
+
         return true;
     }
 }

@@ -1,7 +1,6 @@
 package info.bytecraft.blockfill;
 
 import info.bytecraft.api.BytecraftPlayer;
-import info.bytecraft.blockfill.Fill.Action;
 import info.bytecraft.database.DBBlessDAO;
 import info.tregmine.database.ConnectionPool;
 

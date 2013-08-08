@@ -23,7 +23,7 @@ public class FillCommand extends AbstractCommand
 
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if (!player.isAdmin() && !player.isBuilder())
+        if (!player.canFill())
             return true;
         if (args.length > 0) {
             // fill <type>
