@@ -33,54 +33,24 @@ public class UserCommand extends AbstractCommand
                 if (delegate != null) {
                     BytecraftPlayer target = plugin.getPlayer(delegate);
                     if (target.isOnline()) {
-                        DBPlayerDAO dbPlayer = null;
-                        Connection conn = null;
-                        try {
-                            conn = ConnectionPool.getConnection();
-                            dbPlayer = new DBPlayerDAO(conn);
-
-                            switch (args[1]) {
-                            case "settler":
-                                target.setSettler(true);
-                                target.setTrusted(true);
-                                target.setNameColor("settler");
-                                plugin.getLogger().info(
-                                        ChatColor.AQUA + "You have made "
-                                                + target.getDisplayName()
-                                                + " a settler");
-                                target.sendMessage(ChatColor.AQUA
-                                        + "You have been made a settler");
-                                break;
-                            case "warned":
-                                target.setWarned(true);
-                                player.sendMessage(ChatColor.RED
-                                        + "You have warned "
-                                        + target.getDisplayName());
-                                target.sendMessage(ChatColor.RED
-                                        + "You have been warned.");
-                                target.setNameColor("warned");
-                                break;
-                            case "hardwarned":
-                                target.setHardWarned(true);
-                                player.sendMessage(ChatColor.RED
-                                        + "You have warned "
-                                        + target.getDisplayName());
-                                target.sendMessage(ChatColor.RED
-                                        + "You have been warned.");
-                                target.setNameColor("warned");
-                            }
-
-                            dbPlayer.updatePlayerInfo(target);
-
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        } finally {
-                            if (conn != null) {
-                                try {
-                                    conn.close();
-                                } catch (SQLException e) {
-                                }
-                            }
+                        switch (args[1].toLowerCase()) {
+                        case "settler":
+                            target.setSettler(true);
+                            target.setTrusted(true);
+                            target.setNameColor("settler");
+                            player.sendMessage(
+                                    ChatColor.AQUA + "You have made "
+                                            + target.getDisplayName()
+                                            + ChatColor.AQUA + " a settler");
+                            target.sendMessage(ChatColor.AQUA
+                                    + "You have been made a settler!");
+                            break;
+                        case "member":
+                            target.setMember(true);
+                            target.setNameColor("member");
+                            player.sendMessage(ChatColor.AQUA + "You made " + target.getDisplayName() + ChatColor.AQUA + " a member");
+                            target.sendMessage(ChatColor.AQUA + "You have been made a member!");
+                            
                         }
                         target.setDisplayName(target.getNameColor()
                                 + target.getName());
