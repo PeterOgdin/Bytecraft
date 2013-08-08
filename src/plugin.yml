@@ -50,6 +50,9 @@ commands:
     survival:
         description: Change your gamemode to survival
         usage: /<command>
+    tpblock:
+        description: Manage your teleport block
+        usage: /<command> <on|off|status>
     teleport:
         description: Teleport to a player
         usage: /<command> <player>
