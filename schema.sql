@@ -55,6 +55,19 @@ CREATE TABLE IF NOT EXISTS `fill_log` (
 
 -- --------------------------------------------------------
 
+
+CREATE TABLE IF NOT EXISTS `paper_log` (
+  `paper_id` int(10) NOT NULL AUTO_INCREMENT,
+  `player_name` varchar(16) NOT NULL,
+  `block_x` int(32) NOT NULL,
+  `block_y` int(32) NOT NULL,
+  `block_z` int(32) NOT NULL,
+  `block_type` varchar(32) NOT NULL,
+  `action` enum('break', 'place') NOT NULL,
+  `paper_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  unique key `id` (`paper_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=44258;
+
 --
 -- Table structure for table `player`
 --
@@ -105,24 +118,6 @@ CREATE TABLE IF NOT EXISTS `player_home` (
   KEY `player_id` (`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `player_orelog`
---
-
-CREATE TABLE IF NOT EXISTS `player_orelog` (
-  `orelog_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `player_id` int(10) unsigned DEFAULT NULL,
-  `orelog_material` int(10) unsigned DEFAULT NULL,
-  `orelog_timestamp` int(10) unsigned DEFAULT NULL,
-  `orelog_x` int(11) DEFAULT NULL,
-  `orelog_y` int(11) DEFAULT NULL,
-  `orelog_z` int(11) DEFAULT NULL,
-  `orelog_world` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
-  PRIMARY KEY (`orelog_id`),
-  KEY `player_idx` (`player_id`,`orelog_timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

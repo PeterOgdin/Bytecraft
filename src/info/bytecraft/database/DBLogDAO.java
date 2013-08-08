@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 
 public class DBLogDAO
@@ -79,6 +80,32 @@ public class DBLogDAO
             stm.setString(4, material.name().toLowerCase());
             
             stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+    
+    public void insertPaperLog(BytecraftPlayer player, Location loc, Material mat, String action)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("INSERT INTO paper_log (player_name, block_x, block_y, block_z, material, action) " +
+            		"VALUES (?, ?, ?, ?, ?, ?)");
+            stm.setString(1, player.getName());
+            stm.setInt(2, loc.getBlockX());
+            stm.setInt(3, loc.getBlockY());
+            stm.setInt(4, loc.getBlockZ());
+            stm.setString(5, mat.name().toLowerCase());
+            stm.setString(6, action);
+            
+            stm.execute();
+            
         }catch(SQLException e){
             throw new RuntimeException(e);
         }finally{

@@ -68,6 +68,7 @@ public class Bytecraft extends JavaPlugin
         pm.registerEvents(new BytecraftPlayerListener(this), this);
         pm.registerEvents(new BlessListener(this), this);
         pm.registerEvents(new FillListener(this), this);
+        pm.registerEvents(new BytecraftBlockListener(this), this);
     }
 
     public BytecraftPlayer getPlayer(Player player)
