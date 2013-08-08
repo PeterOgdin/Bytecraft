@@ -42,12 +42,15 @@ public class UserCommand extends AbstractCommand
                         String input = args[1].toLowerCase();
                         if (input.equalsIgnoreCase("settler")) {
                             target.setRank(Rank.SETTLER);
+                            dbPlayer.promoteToSettler(target);
                             target.setDisplayName(target.getRank().getColor()
                                     + target.getName());
                             player.sendMessage(ChatColor.AQUA + "You made "
                                     + target.getDisplayName() + ChatColor.AQUA
                                     + " a " + target.getRank().toString());
-                            target.sendMessage(ChatColor.AQUA + "You have been made a " + target.getRank().toString());
+                            target.sendMessage(ChatColor.AQUA
+                                    + "You have been made a "
+                                    + target.getRank().toString());
                         }
                         else if (input.equalsIgnoreCase("member")) {
                             target.setRank(Rank.MEMBER);
@@ -56,8 +59,11 @@ public class UserCommand extends AbstractCommand
                             player.sendMessage(ChatColor.AQUA + "You made "
                                     + target.getDisplayName() + ChatColor.AQUA
                                     + " a " + target.getRank().toString());
-                            target.sendMessage(ChatColor.AQUA + "You have been made a " + target.getRank().toString());
-                        }else{
+                            target.sendMessage(ChatColor.AQUA
+                                    + "You have been made a "
+                                    + target.getRank().toString());
+                        }
+                        else {
                             return true;
                         }
 
@@ -74,13 +80,6 @@ public class UserCommand extends AbstractCommand
                             }
                         }
                     }
-                    target.setDisplayName(target.getRank().getColor()
-                            + target.getName());
-                }
-                else {
-                    player.sendMessage("No player found by the name of: "
-                            + args[2]);
-                    player.sendNotification(Notification.COMMAND_FAIL);
                 }
             }
         }
@@ -103,15 +102,27 @@ public class UserCommand extends AbstractCommand
                         String input = args[1].toLowerCase();
                         if (input.equalsIgnoreCase("settler")) {
                             target.setRank(Rank.SETTLER);
+                            dbPlayer.promoteToSettler(target);
+                            target.setDisplayName(target.getRank().getColor()
+                                    + target.getName());
+                            target.sendMessage(ChatColor.AQUA
+                                    + "You have been made a "
+                                    + target.getRank().toString());
+                            plugin.getLogger().info(
+                                    "You made " + target.getName() + " a "
+                                            + target.getRank().toString());
                         }
                         else if (input.equalsIgnoreCase("member")) {
                             target.setRank(Rank.MEMBER);
+                            target.setDisplayName(target.getRank().getColor()
+                                    + target.getName());
+                            target.sendMessage(ChatColor.AQUA
+                                    + "You have been made a "
+                                    + target.getRank().toString());
+                            plugin.getLogger().info(
+                                    "You made " + target.getName() + " a "
+                                            + target.getRank().toString());
                         }
-                        target.setDisplayName(target.getRank().getColor()
-                                + target.getName());
-                        
-                        target.sendMessage(ChatColor.AQUA + "You have been made a " + target.getRank().toString());
-                        plugin.getLogger().info("You made " + target.getName() + " a " + target.getRank().toString());
 
                         dbPlayer.updatePlayerInfo(target);
                         dbPlayer.updatePlayerPermissions(target);
@@ -126,13 +137,8 @@ public class UserCommand extends AbstractCommand
                             }
                         }
                     }
-                    target.setDisplayName(target.getRank().getColor()
-                            + target.getName());
                 }
-                else {
-                    plugin.getLogger().info(
-                            "No player found by the name of: " + args[2]);
-                }
+                
             }
         }
         return true;
