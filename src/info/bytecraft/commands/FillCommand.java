@@ -1,11 +1,17 @@
 package info.bytecraft.commands;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.blockfill.Fill;
+import info.bytecraft.blockfill.Fill.Action;
+import info.bytecraft.database.DBLogDAO;
+import info.tregmine.database.ConnectionPool;
 
 public class FillCommand extends AbstractCommand
 {
@@ -30,6 +36,21 @@ public class FillCommand extends AbstractCommand
                         player.sendMessage(ChatColor.YELLOW
                                 + "You undid your last fill: Total volume "
                                 + ChatColor.GOLD + player.getLastFill().undo());
+                        Connection conn = null;
+                        DBLogDAO dbLog = null;
+                        try{
+                            conn = ConnectionPool.getConnection();
+                            dbLog = new DBLogDAO(conn);
+                            dbLog.insertFillLog(player, player.getLastFill(), player.getLastFill().getMaterial(), Action.UNDO);
+                        }catch(SQLException e){
+                            throw new RuntimeException(e);
+                        }finally{
+                            if(conn != null){
+                                try{
+                                    conn.close();
+                                }catch(SQLException e){}
+                            }
+                        }
                     }
                 }
                 else {
@@ -53,6 +74,21 @@ public class FillCommand extends AbstractCommand
                                     + " blocks to "
                                     + mat.name().toLowerCase()
                                             .replace("_", " "));
+                            Connection conn = null;
+                            DBLogDAO dbLog = null;
+                            try{
+                                conn = ConnectionPool.getConnection();
+                                dbLog = new DBLogDAO(conn);
+                                dbLog.insertFillLog(player, player.getLastFill(), mat, Action.FILL);
+                            }catch(SQLException e){
+                                throw new RuntimeException(e);
+                            }finally{
+                                if(conn != null){
+                                    try{
+                                        conn.close();
+                                    }catch(SQLException e){}
+                                }
+                            }
                         }
                     }
                 }
@@ -61,9 +97,12 @@ public class FillCommand extends AbstractCommand
                 Material from, to = null;
                 try {
                     from = Material.getMaterial(Integer.parseInt(args[0]));
-                    to = Material.getMaterial(Integer.parseInt(args[1]));
                 } catch (NumberFormatException e) {
                     from = Material.getMaterial(args[0].toUpperCase());
+                }
+                try {
+                    to = Material.getMaterial(Integer.parseInt(args[1]));
+                } catch (NumberFormatException e) {
                     to = Material.getMaterial(args[1].toUpperCase());
                 }
                 if (from != null && to != null) {
@@ -76,6 +115,21 @@ public class FillCommand extends AbstractCommand
                                 + "You replaced " + fill.replace(to)
                                 + " blocks to "
                                 + to.name().toLowerCase().replace("_", " "));
+                        Connection conn = null;
+                        DBLogDAO dbLog = null;
+                        try{
+                            conn = ConnectionPool.getConnection();
+                            dbLog = new DBLogDAO(conn);
+                            dbLog.insertFillLog(player, player.getLastFill(), to, Action.REPLACE);
+                        }catch(SQLException e){
+                            throw new RuntimeException(e);
+                        }finally{
+                            if(conn != null){
+                                try{
+                                    conn.close();
+                                }catch(SQLException e){}
+                            }
+                        }
                     }
                 }
             }

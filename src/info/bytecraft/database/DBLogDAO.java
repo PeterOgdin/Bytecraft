@@ -1,10 +1,14 @@
 package info.bytecraft.database;
 
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.blockfill.Fill;
+import info.bytecraft.blockfill.Fill.Action;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import org.bukkit.Material;
 
 public class DBLogDAO
 {
@@ -51,6 +55,29 @@ public class DBLogDAO
             stm.setString(1, giver.getName());
             stm.setString(2, reciever.getName());
             stm.setLong(3, amount);
+            stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+    
+    public void insertFillLog(BytecraftPlayer player, Fill fill, Material material, Action action)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("INSERT INTO fill_log (player_name, action, size," +
+            		"material) VALUES (?, ?, ?, ?)");
+            stm.setString(1, player.getName());
+            stm.setString(2, action.toString().toLowerCase());
+            stm.setInt(3, fill.getSize());
+            stm.setString(4, material.name().toLowerCase());
+            
             stm.execute();
         }catch(SQLException e){
             throw new RuntimeException(e);

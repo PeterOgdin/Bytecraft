@@ -42,18 +42,15 @@ CREATE TABLE IF NOT EXISTS `bless` (
 --- Table stucture for table `fill_log`
 --- 
 
+DROP TABLE IF EXISTS `fill_log`;
+
 CREATE TABLE IF NOT EXISTS `fill_log` (
   `fill_id` int(255) NOT NULL AUTO_INCREMENT,
   `player_name` varchar(255) NOT NULL,
-  `rect_x1` int(32) NOT NULL,
-  `rect_y1` int(32) NOT NULL,
-  `rect_z1` int(32) NOT NULL,
-  `rect_x2` int(32) NOT NULL,
-  `rect_y2` int(32) NOT NULL,
-  `rect_z2` int(32) NOT NULL,
+  `action` enum('fill', 'replace', 'undo') NOT NULL DEFAULT 'fill',
+  `size` int(255) NOT NULL,
   `material` varchar(32) NOT NULL,
-  UNIQUE KEY `id` (`fill_id`),
-  PRIMARY KEY `player` (`player_name`)
+  UNIQUE KEY `id` (`fill_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
