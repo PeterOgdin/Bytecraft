@@ -42,17 +42,24 @@ public class UserCommand extends AbstractCommand
                         String input = args[1].toLowerCase();
                         if (input.equalsIgnoreCase("settler")) {
                             target.setRank(Rank.SETTLER);
+                            target.setDisplayName(target.getRank().getColor()
+                                    + target.getName());
+                            player.sendMessage(ChatColor.AQUA + "You made "
+                                    + target.getDisplayName() + ChatColor.AQUA
+                                    + " a " + target.getRank().toString());
+                            target.sendMessage(ChatColor.AQUA + "You have been made a " + target.getRank().toString());
                         }
                         else if (input.equalsIgnoreCase("member")) {
                             target.setRank(Rank.MEMBER);
+                            target.setDisplayName(target.getRank().getColor()
+                                    + target.getName());
+                            player.sendMessage(ChatColor.AQUA + "You made "
+                                    + target.getDisplayName() + ChatColor.AQUA
+                                    + " a " + target.getRank().toString());
+                            target.sendMessage(ChatColor.AQUA + "You have been made a " + target.getRank().toString());
+                        }else{
+                            return true;
                         }
-                        target.setDisplayName(target.getRank().getColor()
-                                + target.getName());
-
-                        player.sendMessage(ChatColor.AQUA + "You made "
-                                + target.getDisplayName() + ChatColor.AQUA
-                                + " a " + target.getRank().toString());
-                        target.sendMessage(ChatColor.AQUA + "You have been made a " + target.getRank().toString());
 
                         dbPlayer.updatePlayerInfo(target);
                         dbPlayer.updatePlayerPermissions(target);
