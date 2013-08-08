@@ -118,7 +118,7 @@ public abstract class PlayerDelegate
         return delegate.sendChunkChange(p0, p1, p2, p3, p4);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void updateInventory()
     {
         checkState();
@@ -491,7 +491,7 @@ public abstract class PlayerDelegate
         return delegate.isFlying();
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public boolean isOnGround()
     {
         checkState();
@@ -648,7 +648,7 @@ public abstract class PlayerDelegate
         return delegate.getLastTwoTargetBlocks(p0, p1);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public org.bukkit.entity.Snowball throwSnowball()
     {
         checkState();
@@ -703,7 +703,7 @@ public abstract class PlayerDelegate
         return delegate.getLastDamage();
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public int _INVALID_getLastDamage()
     {
         checkState();
@@ -716,7 +716,7 @@ public abstract class PlayerDelegate
         delegate.setLastDamage(p0);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void _INVALID_setLastDamage(int p0)
     {
         checkState();
@@ -849,14 +849,14 @@ public abstract class PlayerDelegate
         return delegate.getEyeHeight(p0);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public org.bukkit.entity.Egg throwEgg()
     {
         checkState();
         return delegate.throwEgg();
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public org.bukkit.entity.Arrow shootArrow()
     {
         checkState();
@@ -1109,42 +1109,42 @@ public abstract class PlayerDelegate
         return delegate.hasMetadata(p0);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void _INVALID_damage(int p0, org.bukkit.entity.Entity p1)
     {
         checkState();
         delegate._INVALID_damage(p0, p1);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void _INVALID_damage(int p0)
     {
         checkState();
         delegate._INVALID_damage(p0);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public int _INVALID_getHealth()
     {
         checkState();
         return delegate._INVALID_getHealth();
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void _INVALID_setHealth(int p0)
     {
         checkState();
         delegate._INVALID_setHealth(p0);
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public int _INVALID_getMaxHealth()
     {
         checkState();
         return delegate._INVALID_getMaxHealth();
     }
 
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     public void _INVALID_setMaxHealth(int p0)
     {
         checkState();
