@@ -27,11 +27,11 @@ public class DBLogDAO
         PreparedStatement stmt = null;
         try {
             String sql =
-                    "INSERT INTO player_chatlog (player_id, "
+                    "INSERT INTO player_chatlog (player_name, "
                             + "chatlog_channel, chatlog_message) ";
             sql += "VALUES (?, ?, ?)";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, player.getId());
+            stmt.setString(1, player.getName());
             stmt.setString(2, channel);
             stmt.setString(3, message);
             stmt.execute();
