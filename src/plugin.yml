@@ -22,6 +22,7 @@ commands:
     gamemode:
         description: Change your gamemode
         usage: /<command> [creative|survival]
+        aliases: [gm]
     give:
         description: Give another player an item
         usage: /<command> <player> <id|name> <amount> <data>
@@ -45,6 +46,7 @@ commands:
     summon:
         description: Summon a player to your location
         usage: /<command> <player>
+        aliases: [s, tphere]
     survival:
         description: Change your gamemode to survival
         usage: /<command>
@@ -55,6 +57,10 @@ commands:
     user:
         description: Manage players permissions
         usage: /<command> make <setter|warned|hardwarned> <player>
+    vanish:
+        description: Vanish
+        usage: /<command>
+        aliases: [v]
     wallet:
         description: Manage your wallet
         usage: /<command> <balance>
@@ -64,3 +70,4 @@ commands:
     who:
         description: See who's online
         usage: /<command>
+        aliases: [list]
