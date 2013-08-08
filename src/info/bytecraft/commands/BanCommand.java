@@ -24,7 +24,7 @@ public class BanCommand extends AbstractCommand
     
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if(!player.isAdmin() || !player.isGuard()){
+        if(!player.isAdmin()){
             player.sendNotification(Notification.COMMAND_FAIL);
             return true;
         }

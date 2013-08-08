@@ -40,10 +40,7 @@ public class WarpCommand extends AbstractCommand
 
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if (args.length != 1)
-            return false;
-        if (!player.isTrusted())
-            return true;
+        if (args.length != 1)return true;
         String warp = args[0];
         Connection conn = null;
         try {
