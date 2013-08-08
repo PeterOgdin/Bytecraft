@@ -17,24 +17,6 @@ import org.bukkit.entity.Player;
 public class BytecraftPlayer extends PlayerDelegate
 {
 
-    @SuppressWarnings("serial")
-    private static final Map<String, ChatColor> GOD_COLORS = 
-        new HashMap<String, ChatColor>(){
-            {
-                put("red", ChatColor.RED);
-                put("aqua", ChatColor.AQUA);
-                put("gold", ChatColor.GOLD);
-                put("yellow", ChatColor.YELLOW);
-                put("dark_aqua", ChatColor.DARK_AQUA);
-                put("pink", ChatColor.LIGHT_PURPLE);
-                put("purple", ChatColor.DARK_PURPLE);
-                put("green", ChatColor.GREEN);
-                put("dark_green", ChatColor.DARK_GREEN);
-                put("dark_red", ChatColor.DARK_RED);
-                put("gray", ChatColor.GRAY);
-            }
-    };
-
     private int id = 0;
     private Rank rank;
 
@@ -155,7 +137,22 @@ public class BytecraftPlayer extends PlayerDelegate
     }
     
     public ChatColor getGodColor(){
-        return GOD_COLORS.get(godColor);
+        Connection conn = null;
+        DBPlayerDAO dbPlayer = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            dbPlayer = new DBPlayerDAO(conn);
+            return dbPlayer.getGodColor(this);
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
     }
 
     public void setGodColor(String godColor)

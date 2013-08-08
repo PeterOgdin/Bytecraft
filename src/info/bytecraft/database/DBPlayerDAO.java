@@ -4,10 +4,13 @@ import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.Rank;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,6 +23,25 @@ public class DBPlayerDAO
     {
         this.conn = conn;
     }
+    
+    @SuppressWarnings("serial")
+    private static final Map<String, ChatColor> GOD_COLORS = 
+        new HashMap<String, ChatColor>(){
+            {
+                put("red", ChatColor.RED);
+                put("aqua", ChatColor.AQUA);
+                put("gold", ChatColor.GOLD);
+                put("yellow", ChatColor.YELLOW);
+                put("dark_aqua", ChatColor.DARK_AQUA);
+                put("pink", ChatColor.LIGHT_PURPLE);
+                put("purple", ChatColor.DARK_PURPLE);
+                put("green", ChatColor.GREEN);
+                put("dark_green", ChatColor.DARK_GREEN);
+                put("dark_red", ChatColor.DARK_RED);
+                put("gray", ChatColor.GRAY);
+            }
+    };
+    
 
     public BytecraftPlayer getPlayer(Player player)
     {
@@ -350,16 +372,17 @@ public class DBPlayerDAO
         }
     }
     
-    public String getProperty(BytecraftPlayer player, String key)
+    public ChatColor getGodColor(BytecraftPlayer player)
     {
         PreparedStatement stm = null;
         try{
-            stm = conn.prepareStatement("SELECT * FROM player_property WHERE player_id = ?");
+            stm = conn.prepareStatement("SELECT * FROM player_property WHERE player_id = ? AND property_key = ?");
             stm.setInt(1, player.getId());
+            stm.setString(2, "god_color");
             stm.execute();
             ResultSet rs = stm.getResultSet();
             if(rs.next()){
-                return rs.getString(key);
+                return GOD_COLORS.get(rs.getString("property_value"));
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
@@ -370,6 +393,48 @@ public class DBPlayerDAO
                 }catch(SQLException e){}
             }
         }
-        return "";
+        return ChatColor.RED;
+    }
+    
+    public void promoteToSettler(BytecraftPlayer player)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("UPDATE player SET player_promoted = ? WHERE player_id = ?");
+            stm.setDate(1, new Date(System.currentTimeMillis()));
+            stm.setInt(1, player.getId());
+            stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
+    }
+    
+    public Date getDatePromoted(BytecraftPlayer player)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM player WHERE player_id = ?");
+            stm.setInt(1, player.getId());
+            stm.execute();
+            ResultSet rs = stm.getResultSet();
+            if(rs.next()){
+                return rs.getDate("player_promoted");
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
+        return new Date(System.currentTimeMillis());
     }
 }
