@@ -95,7 +95,7 @@ public class DBLogDAO
     {
         PreparedStatement stm = null;
         try{
-            stm = conn.prepareStatement("INSERT INTO paper_log (player_name, block_x, block_y, block_z, material, action) " +
+            stm = conn.prepareStatement("INSERT INTO paper_log (player_name, block_x, block_y, block_z, block_type, action) " +
             		"VALUES (?, ?, ?, ?, ?, ?)");
             stm.setString(1, player.getName());
             stm.setInt(2, loc.getBlockX());
