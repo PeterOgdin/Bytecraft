@@ -80,7 +80,7 @@ public class Bytecraft extends JavaPlugin
     {
         if(players.containsKey(name)){
             BytecraftPlayer player = players.get(name);
-            player.setDisplayName(player.getNameColor() + player.getName());
+            player.setDisplayName(player.getRank().getColor() + player.getName());
             return player;
         }else{
             try {
@@ -113,7 +113,7 @@ public class Bytecraft extends JavaPlugin
             }
 
             players.put(player.getName(), player);
-            player.setDisplayName(player.getNameColor() + player.getName());
+            player.setDisplayName(player.getRank().getColor() + player.getName());
             return player;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -129,24 +129,6 @@ public class Bytecraft extends JavaPlugin
 
     public void removePlayer(Player player)
     {
-        Connection conn = null;
-        DBPlayerDAO dbPlayer = null;
-        
-        try{
-            conn = ConnectionPool.getConnection();
-            dbPlayer = new DBPlayerDAO(conn);
-            
-            BytecraftPlayer bPlayer = getPlayer(player);
-            dbPlayer.updatePlayerInfo(bPlayer);
-        }catch(SQLException e){
-            throw new RuntimeException(e);
-        }finally{
-            if(conn != null){
-                try {
-                    conn.close();
-                } catch (SQLException e) {}
-            }
-        }
         this.players.remove(player.getName());
     }
 
