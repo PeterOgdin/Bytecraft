@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `player_wallet` bigint(20) DEFAULT '750',
   `player_banned` enum('true','false') NOT NULL DEFAULT 'false',
   `player_rank` enum('warned','hard_warned','newcomer','settler','member','mentor','donator','gaurd','builder','admin','senior_admin') NOT NULL DEFAULT 'newcomer',
-  `player_promoted` DATE NOT NULL,
+  `player_promoted` DATE,
   UNIQUE KEY `uid` (`player_id`),
   KEY `player` (`player_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

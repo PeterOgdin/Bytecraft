@@ -6,8 +6,6 @@ import info.tregmine.database.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +21,6 @@ public class BytecraftPlayer extends PlayerDelegate
     private boolean invisible;
     private boolean tpblock;
 
-    private String godColor;
     private String chatChannel = "GLOBAL";
     
     private Block fillBlock1;
@@ -153,11 +150,6 @@ public class BytecraftPlayer extends PlayerDelegate
                 }
             }
         }
-    }
-
-    public void setGodColor(String godColor)
-    {
-        this.godColor = godColor;
     }
 
     public BytecraftPlayer getBlessTarget()

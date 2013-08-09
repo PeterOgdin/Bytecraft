@@ -110,15 +110,15 @@ public class DBPlayerDAO
                             + "WHERE player_id = ?");
             stmt.setInt(1, player.getId());
             stmt.execute();
-
+            
             rs = stmt.getResultSet();
             while (rs.next()) {
                 String key = rs.getString("property_key");
                 String value = rs.getString("property_value");
-                if("god_color".equals(key)){
-                    player.setGodColor(value);
-                }else if("tpblock".equalsIgnoreCase(key)){
+                if("tpblock".equalsIgnoreCase(key)){
                     player.setTeleportBlock(Boolean.valueOf(value));
+                }else if("invisible".equalsIgnoreCase(key)){
+                    player.setInvisible(Boolean.valueOf(value));
                 }
             }
         } catch(SQLException e){
@@ -402,7 +402,7 @@ public class DBPlayerDAO
         try{
             stm = conn.prepareStatement("UPDATE player SET player_promoted = ? WHERE player_id = ?");
             stm.setDate(1, new Date(System.currentTimeMillis()));
-            stm.setInt(1, player.getId());
+            stm.setInt(2, player.getId());
             stm.execute();
         }catch(SQLException e){
             throw new RuntimeException(e);
@@ -435,6 +435,6 @@ public class DBPlayerDAO
                 }catch(SQLException e){}
             }
         }
-        return new Date(System.currentTimeMillis());
+        return null;
     }
 }
