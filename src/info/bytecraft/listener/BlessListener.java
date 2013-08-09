@@ -57,62 +57,72 @@ public class BlessListener implements Listener
     public void onClick(PlayerInteractEvent event)
     {
         BytecraftPlayer player = plugin.getPlayer(event.getPlayer());
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK 
-                && player.isAdmin()
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && player.isAdmin()
                 && player.getItemInHand().getType() == Material.BONE
                 && allowedBlocks.contains(event.getClickedBlock().getType())) {
             BytecraftPlayer target = player.getBlessTarget();
-            if(target == null){
+            if (target == null) {
                 player.sendMessage(ChatColor.RED + "Use /bless [name] first");
                 return;
             }
-            
+
             Connection conn = null;
-            try{
+            try {
                 conn = ConnectionPool.getConnection();
                 DBBlessDAO dbBless = new DBBlessDAO(conn);
-                if(dbBless.bless(event.getClickedBlock(), target)){
-                    target.sendMessage(ChatColor.AQUA + "Your god has blessed a block in your name!");
-                    target.sendNotification(Notification.BLESS);
-                    player.sendMessage(ChatColor.AQUA + "You have blessed a block for " + target.getDisplayName());
-                    player.setBlessTarget(null);
-                }
-            }catch(SQLException e){
+                dbBless.bless(event.getClickedBlock(), target);
+                target.sendMessage(ChatColor.AQUA
+                        + "Your god has blessed a block in your name!");
+                target.sendNotification(Notification.BLESS);
+                player.sendMessage(ChatColor.AQUA
+                        + "You have blessed a block for "
+                        + target.getDisplayName());
+                player.setBlessTarget(null);
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
-            }finally{
-                if(conn != null){
-                    try{
+            } finally {
+                if (conn != null) {
+                    try {
                         conn.close();
-                    }catch(SQLException e){}
+                    } catch (SQLException e) {
+                    }
                 }
             }
             event.setCancelled(true);
             return;
-        }else{
-            if(event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK){
+        }
+        else {
+            if (event.getAction() == Action.LEFT_CLICK_BLOCK
+                    || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 Connection conn = null;
-                try{
+                try {
                     conn = ConnectionPool.getConnection();
                     DBBlessDAO dbBless = new DBBlessDAO(conn);
-                    
-                    if(dbBless.isBlessed(event.getClickedBlock())){
-                        if(!player.getName().equalsIgnoreCase(dbBless.getOwner(event.getClickedBlock()))){
-                            player.sendMessage(ChatColor.RED + "Blessed to: " + ChatColor.AQUA + dbBless.getOwner(event.getClickedBlock()));
-                            if(!player.isAdmin()){
+
+                    if (dbBless.isBlessed(event.getClickedBlock())) {
+                        if (!player.getName().equalsIgnoreCase(
+                                dbBless.getOwner(event.getClickedBlock()))) {
+                            player.sendMessage(ChatColor.RED + "Blessed to: "
+                                    + ChatColor.AQUA
+                                    + dbBless.getOwner(event.getClickedBlock()));
+                            if (!player.isAdmin()) {
                                 event.setCancelled(true);
                                 return;
                             }
-                        }else{
-                            player.sendMessage(ChatColor.AQUA + "Blessed to you");
+                        }
+                        else {
+                            player.sendMessage(ChatColor.AQUA
+                                    + "Blessed to you");
                         }
                     }
-                }catch(SQLException e){
+                } catch (SQLException e) {
                     throw new RuntimeException(e);
-                }finally{
-                    if(conn != null){
-                        try{
+                } finally {
+                    if (conn != null) {
+                        try {
                             conn.close();
-                        }catch(SQLException e){}
+                        } catch (SQLException e) {
+                        }
                     }
                 }
             }

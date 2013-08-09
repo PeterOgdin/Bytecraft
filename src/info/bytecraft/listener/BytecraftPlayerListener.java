@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -74,8 +75,8 @@ public class BytecraftPlayerListener implements Listener
             plugin.removePlayer(event.getPlayer());
             return;
         }
-        event.setQuitMessage(plugin.getPlayer(event.getPlayer())
-                .getDisplayName() + ChatColor.BLUE + " has left the game");
+        event.setQuitMessage(ChatColor.GRAY + "-QUIT- " + plugin.getPlayer(event.getPlayer())
+                .getDisplayName() + ChatColor.AQUA + " has left the game");
         plugin.removePlayer(event.getPlayer());
     }
 
@@ -114,7 +115,7 @@ public class BytecraftPlayerListener implements Listener
 
         if (from != null && (from != player)) {
             player.sendMessage(ChatColor.YELLOW + "You got " + ChatColor.GOLD
-                    + stack.getAmount() + " " + stack.getType()
+                    + stack.getAmount() + " " + stack.getType().toString().toLowerCase()
                     + ChatColor.YELLOW + " from " + from.getDisplayName() + ".");
             from.sendMessage(ChatColor.YELLOW + "You gave "
                     + player.getDisplayName() + ChatColor.GOLD + " "
@@ -122,5 +123,11 @@ public class BytecraftPlayerListener implements Listener
                     + stack.getType().name().toLowerCase().replace("_", " "));
             droppedItems.remove(event.getItem());
         }
+    }
+    
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event)
+    {
+        event.setDeathMessage(null);
     }
 }

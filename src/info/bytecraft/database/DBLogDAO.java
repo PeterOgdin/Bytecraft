@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 public class DBLogDAO
 {
@@ -95,17 +96,45 @@ public class DBLogDAO
     {
         PreparedStatement stm = null;
         try{
-            stm = conn.prepareStatement("INSERT INTO paper_log (player_name, block_x, block_y, block_z, block_type, action) " +
-            		"VALUES (?, ?, ?, ?, ?, ?)");
+            stm = conn.prepareStatement("INSERT INTO paper_log (player_name, block_x, block_y, block_z, block_type, block_world, action) " +
+            		"VALUES (?, ?, ?, ?, ?, ?, ?)");
             stm.setString(1, player.getName());
             stm.setInt(2, loc.getBlockX());
             stm.setInt(3, loc.getBlockY());
             stm.setInt(4, loc.getBlockZ());
             stm.setString(5, mat.name().toLowerCase());
-            stm.setString(6, action);
+            stm.setString(6, loc.getWorld().getName().toLowerCase());
+            stm.setString(7, action);
             
             stm.execute();
             
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+    
+    public boolean isLegal(Block block)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM paper_log WHERE block_x = ? AND block_y = ? AND block_Z = ? AND block_world = ?");
+            stm.setInt(1, block.getX());
+            stm.setInt(2, block.getY());
+            stm.setInt(3, block.getZ());
+            stm.setString(4, block.getWorld().getName());
+            
+            stm.execute();
+            if(stm.getResultSet().next()){
+                return false;
+            }else{
+                return true;
+            }
         }catch(SQLException e){
             throw new RuntimeException(e);
         }finally{

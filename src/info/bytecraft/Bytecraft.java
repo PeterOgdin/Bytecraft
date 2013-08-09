@@ -9,12 +9,14 @@ import java.util.List;
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.PlayerBannedException;
 import info.bytecraft.commands.*;
+import info.bytecraft.database.DBLogDAO;
 import info.bytecraft.database.DBPlayerDAO;
 import info.bytecraft.listener.*;
 import info.tregmine.database.ConnectionPool;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,10 +50,12 @@ public class Bytecraft extends JavaPlugin
         getCommand("god").setExecutor(new SayCommand(this, "god"));
         getCommand("item").setExecutor(new ItemCommand(this));
         getCommand("kick").setExecutor(new KickCommand(this));
+        getCommand("kill").setExecutor(new KillCommand(this));
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
         getCommand("summon").setExecutor(new SummonCommand(this));
         getCommand("survival").setExecutor(new GameModeCommand(this, "survival"));
+        getCommand("time").setExecutor(new TimeCommand(this));
         getCommand("tpblock").setExecutor(new TeleportBlockCommand(this));
         getCommand("teleport").setExecutor(new TeleportCommand(this));
         getCommand("user").setExecutor(new UserCommand(this));
@@ -139,5 +143,39 @@ public class Bytecraft extends JavaPlugin
             playersList.add(player);
         }
         return playersList;
+    }
+    
+    public long getValue(Block block)
+    {
+        Connection conn = null;
+        DBLogDAO dbLog = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            dbLog = new DBLogDAO(conn);
+            if(!dbLog.isLegal(block)){
+                return 0;
+            }else{
+                switch(block.getType()){
+                case STONE: return 1;
+                case DIRT: return 1;
+                case SAND: return 2;
+                case IRON_ORE: return 30;
+                case COAL_ORE: return 5;
+                case GOLD_ORE: return 50;
+                case EMERALD_ORE: return 100;
+                case DIAMOND_ORE: return 200;
+                default: 
+                }
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try{
+                    conn.close();
+                }catch(SQLException e){}
+            }
+        }
+        return 0;
     }
 }

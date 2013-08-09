@@ -36,6 +36,9 @@ commands:
     kick:
         description: Kick a player
         usage: /<command> <player>
+    kill:
+        description: Kill yourself
+        usage: /<command>
     message:
         description: Send a message to another player
         usage: /<command> <player> <message>
@@ -50,6 +53,9 @@ commands:
     survival:
         description: Change your gamemode to survival
         usage: /<command>
+    time:
+        description: Change your personal time
+        usage: /<command> [day|night|normal]
     tpblock:
         description: Manage your teleport block
         usage: /<command> <on|off|status>

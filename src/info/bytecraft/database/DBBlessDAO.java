@@ -59,7 +59,8 @@ public class DBBlessDAO
             stm.setInt(3, block.getY());
             stm.setInt(4, block.getZ());
             stm.setString(5, block.getWorld().getName());
-            return stm.execute();
+            stm.execute();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

@@ -40,6 +40,11 @@ public enum Rank
         return Rank.NEWCOMER;
     }
     
+    public boolean canBuild()
+    {
+        return (this != HARD_WARNED && this != NEWCOMER);
+    }
+    
     @Override
     public String toString()
     {
