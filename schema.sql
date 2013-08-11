@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS `paper_log` (
   `block_z` int(32) NOT NULL,
   `block_world` varchar(32) NOT NULL DEFAULT 'world',
   `block_type` varchar(32) NOT NULL,
-  `action` enum('break','place') NOT NULL,
-  `paper_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `action` enum('broke','placed') NOT NULL,
+  `paper_time` int(10) unsigned DEFAULT NULL,
   UNIQUE KEY `id` (`paper_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -84,7 +84,8 @@ CREATE TABLE IF NOT EXISTS `player` (
   `player_wallet` bigint(20) DEFAULT '750',
   `player_banned` enum('true','false') NOT NULL DEFAULT 'false',
   `player_rank` enum('warned','hard_warned','newcomer','settler','member','mentor','donator','gaurd','builder','admin','senior_admin') NOT NULL DEFAULT 'newcomer',
-  `player_promoted` date DEFAULT NULL,
+  `player_promoted` int(10) unsigned DEFAULT NULL,
+  `player_playtime` int(10) unsigned DEFAULT 0,
   UNIQUE KEY `uid` (`player_id`),
   KEY `player` (`player_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -111,19 +112,17 @@ CREATE TABLE IF NOT EXISTS `player_chatlog` (
 --
 
 CREATE TABLE IF NOT EXISTS `player_home` (
-  `home_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `player_id` int(10) unsigned DEFAULT NULL,
-  `home_name` varchar(32) DEFAULT NULL,
+  `home_id` int(10) NOT NULL AUTO_INCREMENT,
+  `player_name` varchar(20) NOT NULL,
   `home_x` double DEFAULT NULL,
   `home_y` double DEFAULT NULL,
-  `home_z` double DEFAULT NULL,
-  `home_pitch` double DEFAULT NULL,
+  `home_z` double DEFAULT NULL,  
   `home_yaw` double DEFAULT NULL,
+  `home_pitch` double DEFAULT NULL,
   `home_world` varchar(32) DEFAULT NULL,
-  `home_time` double DEFAULT NULL,
   PRIMARY KEY (`home_id`),
-  KEY `player_id` (`player_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `player_name` (`player_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
