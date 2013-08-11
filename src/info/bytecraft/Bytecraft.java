@@ -8,8 +8,8 @@ import java.util.List;
 
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.PlayerBannedException;
+import info.bytecraft.api.Rank;
 import info.bytecraft.commands.*;
-import info.bytecraft.database.DBLogDAO;
 import info.bytecraft.database.DBPlayerDAO;
 import info.bytecraft.listener.*;
 import info.tregmine.database.ConnectionPool;
@@ -31,21 +31,23 @@ public class Bytecraft extends JavaPlugin
     public void onEnable()
     {
         players = Maps.newHashMap();
-
         for (Player delegate : Bukkit.getOnlinePlayers()) {
             try {
                 addPlayer(delegate);
-            } catch (PlayerBannedException e) {}
+            } catch (PlayerBannedException e) {
+            }
         }
 
         registerEvents();
-        
+
         getCommand("ban").setExecutor(new BanCommand(this));
         getCommand("bless").setExecutor(new BlessCommand(this));
-        getCommand("creative").setExecutor(new GameModeCommand(this, "creative"));
+        getCommand("creative").setExecutor(
+                new GameModeCommand(this, "creative"));
         getCommand("channel").setExecutor(new ChannelCommand(this));
         getCommand("fill").setExecutor(new FillCommand(this));
-        getCommand("gamemode").setExecutor(new GameModeCommand(this, "gamemode"));
+        getCommand("gamemode").setExecutor(
+                new GameModeCommand(this, "gamemode"));
         getCommand("give").setExecutor(new GiveCommand(this));
         getCommand("god").setExecutor(new SayCommand(this, "god"));
         getCommand("item").setExecutor(new ItemCommand(this));
@@ -54,7 +56,8 @@ public class Bytecraft extends JavaPlugin
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
         getCommand("summon").setExecutor(new SummonCommand(this));
-        getCommand("survival").setExecutor(new GameModeCommand(this, "survival"));
+        getCommand("survival").setExecutor(
+                new GameModeCommand(this, "survival"));
         getCommand("time").setExecutor(new TimeCommand(this));
         getCommand("tpblock").setExecutor(new TeleportBlockCommand(this));
         getCommand("teleport").setExecutor(new TeleportCommand(this));
@@ -73,6 +76,7 @@ public class Bytecraft extends JavaPlugin
         pm.registerEvents(new BlessListener(this), this);
         pm.registerEvents(new FillListener(this), this);
         pm.registerEvents(new BytecraftBlockListener(this), this);
+        pm.registerEvents(new PlayerPromotionListener(this), this);
     }
 
     public BytecraftPlayer getPlayer(Player player)
@@ -82,11 +86,13 @@ public class Bytecraft extends JavaPlugin
 
     public BytecraftPlayer getPlayer(String name)
     {
-        if(players.containsKey(name)){
+        if (players.containsKey(name)) {
             BytecraftPlayer player = players.get(name);
-            player.setDisplayName(player.getRank().getColor() + player.getName());
+            player.setDisplayName(player.getRank().getColor()
+                    + player.getName());
             return player;
-        }else{
+        }
+        else {
             try {
                 return addPlayer(Bukkit.getPlayer(name));
             } catch (PlayerBannedException e) {
@@ -95,7 +101,8 @@ public class Bytecraft extends JavaPlugin
         return null;
     }
 
-    public BytecraftPlayer addPlayer(Player srcPlayer) throws PlayerBannedException
+    public BytecraftPlayer addPlayer(Player srcPlayer)
+            throws PlayerBannedException
     {
         if (players.containsKey(srcPlayer.getName())) {
             return players.get(srcPlayer.getName());
@@ -111,13 +118,15 @@ public class Bytecraft extends JavaPlugin
             if (player == null) {
                 player = playerDAO.createPlayer(srcPlayer);
             }
-            
-            if(playerDAO.isBanned(player)){
-                throw new PlayerBannedException(ChatColor.RED + "You are not allowed on this server");
+
+            if (playerDAO.isBanned(player)) {
+                throw new PlayerBannedException(ChatColor.RED
+                        + "You are not allowed on this server");
             }
 
             players.put(player.getName(), player);
-            player.setDisplayName(player.getRank().getColor() + player.getName());
+            player.setDisplayName(player.getRank().getColor()
+                    + player.getName());
             return player;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -131,8 +140,23 @@ public class Bytecraft extends JavaPlugin
         }
     }
 
-    public void removePlayer(Player player)
+    public void removePlayer(BytecraftPlayer player)
     {
+        Connection conn = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            DBPlayerDAO dbPlayer = new DBPlayerDAO(conn);
+                dbPlayer.updatePlayTime(player);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
         this.players.remove(player.getName());
     }
 
@@ -144,38 +168,32 @@ public class Bytecraft extends JavaPlugin
         }
         return playersList;
     }
-    
+
     public long getValue(Block block)
     {
-        Connection conn = null;
-        DBLogDAO dbLog = null;
-        try{
-            conn = ConnectionPool.getConnection();
-            dbLog = new DBLogDAO(conn);
-            if(!dbLog.isLegal(block)){
-                return 0;
-            }else{
-                switch(block.getType()){
-                case STONE: return 1;
-                case DIRT: return 1;
-                case SAND: return 2;
-                case IRON_ORE: return 30;
-                case COAL_ORE: return 5;
-                case GOLD_ORE: return 50;
-                case EMERALD_ORE: return 100;
-                case DIAMOND_ORE: return 200;
-                default: 
-                }
-            }
-        }catch(SQLException e){
-            throw new RuntimeException(e);
-        }finally{
-            if(conn != null){
-                try{
-                    conn.close();
-                }catch(SQLException e){}
-            }
+        switch (block.getType()) {
+        case STONE:
+            return 1;
+        case DIRT:
+            return 1;
+        case GRASS:
+            return 1;
+        case SAND:
+            return 2;
+        case IRON_ORE:
+            return 30;
+        case COAL_ORE:
+            return 5;
+        case LAPIS_ORE:
+            return 5;
+        case GOLD_ORE:
+            return 50;
+        case EMERALD_ORE:
+            return 100;
+        case DIAMOND_ORE:
+            return 200;
+        default:
+            return 1;
         }
-        return 0;
     }
 }

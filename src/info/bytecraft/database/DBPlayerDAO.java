@@ -4,11 +4,12 @@ import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.Rank;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +44,8 @@ public class DBPlayerDAO
     };
     
 
+    private final SimpleDateFormat format = new SimpleDateFormat("MM/dd/YY hh:mm:ss a");
+    
     public BytecraftPlayer getPlayer(Player player)
     {
         return getPlayer(player.getName(), player);
@@ -201,20 +204,18 @@ public class DBPlayerDAO
         }
     }
 
-    public void updatePlayerInfo(BytecraftPlayer player) throws SQLException
+    public void updatePlayerInfo(BytecraftPlayer player)
     {
         updateProperty(player, "invisible", player.isInvisible());
         updateProperty(player, "tpblock", player.isTeleportBlock());
     }
 
     public void updateProperty(BytecraftPlayer player, String key, boolean value)
-            throws SQLException
     {
         updateProperty(player, key, String.valueOf(value));
     }
 
     public void updateProperty(BytecraftPlayer player, String key, String value)
-            throws SQLException
     {
         if (value == null) {
             return;
@@ -231,6 +232,8 @@ public class DBPlayerDAO
             stmt.setString(3, value);
             stmt.execute();
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         } finally {
             if (stmt != null) {
                 try {
@@ -400,9 +403,8 @@ public class DBPlayerDAO
     {
         PreparedStatement stm = null;
         try{
-            stm = conn.prepareStatement("UPDATE player SET player_promoted = ? WHERE player_id = ?");
-            stm.setDate(1, new Date(System.currentTimeMillis()));
-            stm.setInt(2, player.getId());
+            stm = conn.prepareStatement("UPDATE player SET player_promoted = unix_timestamp() WHERE player_name = ?");
+            stm.setString(1, player.getName());
             stm.execute();
         }catch(SQLException e){
             throw new RuntimeException(e);
@@ -415,16 +417,17 @@ public class DBPlayerDAO
         }
     }
     
-    public Date getDatePromoted(BytecraftPlayer player)
+    public long getPromotedLong(BytecraftPlayer player)
     {
         PreparedStatement stm = null;
         try{
-            stm = conn.prepareStatement("SELECT * FROM player WHERE player_id = ?");
-            stm.setInt(1, player.getId());
+            stm = conn.prepareStatement("SELECT * FROM player WHERE player_name = ?");
+            stm.setString(1, player.getName());
             stm.execute();
+            
             ResultSet rs = stm.getResultSet();
             if(rs.next()){
-                return rs.getDate("player_promoted");
+               return rs.getLong("player_promoted");
             }
         }catch(SQLException e){
             throw new RuntimeException(e);
@@ -435,6 +438,56 @@ public class DBPlayerDAO
                 }catch(SQLException e){}
             }
         }
-        return null;
+        return 0;
+    }
+    
+    public String formattedPropmotedTime(BytecraftPlayer player)
+    {
+        Date date = new Date(getPromotedLong(player) * 1000L);
+        return format.format(date);
+    }
+    
+    public int getPlayTime(BytecraftPlayer player)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM player WHERE player_name = ?");
+            stm.setString(1, player.getName());
+            stm.execute();
+            ResultSet rs = stm.getResultSet();
+            if(rs.next()){
+                return rs.getInt("player_playtime");
+            }else{
+                return 0;
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
+    }
+    
+    public void updatePlayTime(BytecraftPlayer player)
+    {
+        PreparedStatement stm = null;
+        int playTime = player.getPlayTime() + player.getOnlineTime();
+        try{
+            stm = conn.prepareStatement("UPDATE player SET player_playtime = ? WHERE player_name = ?");
+            stm.setInt(1, playTime);
+            stm.setString(2, player.getName());
+            stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
     }
 }

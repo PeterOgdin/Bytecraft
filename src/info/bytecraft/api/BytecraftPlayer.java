@@ -6,6 +6,7 @@ import info.tregmine.database.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,10 +29,13 @@ public class BytecraftPlayer extends PlayerDelegate
     private Fill lastFill;
     
     private BytecraftPlayer blessTarget;
+    
+    private Date loginTime;
 
     public BytecraftPlayer(Player player)
     {
         super(player);
+        loginTime = new Date();
     }
 
     public BytecraftPlayer(String name)
@@ -57,6 +61,7 @@ public class BytecraftPlayer extends PlayerDelegate
     public void setRank(Rank rank)
     {
         this.rank = rank;
+        setDisplayName(rank.getColor() + getName());
     }
 
     public boolean isInvisible()
@@ -220,6 +225,47 @@ public class BytecraftPlayer extends PlayerDelegate
     public boolean isMentor()
     {
         return (isModerator() || this.rank == Rank.MENTOR);
+    }
+
+    public int getOnlineTime()
+    {
+        return (int)((new Date().getTime() - loginTime.getTime())/1000L);
+    }
+    
+    public int getPlayTime()
+    {
+        Connection conn = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            DBPlayerDAO dbPlayer = new DBPlayerDAO(conn);
+            return dbPlayer.getPlayTime(this);
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try{
+                    conn.close();
+                }catch(SQLException e){}
+            }
+        }
+    }
+    
+    public long getPromotedTime()
+    {
+        Connection conn = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            DBPlayerDAO dbPlayer = new DBPlayerDAO(conn);
+            return dbPlayer.getPromotedLong(this);
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try{
+                    conn.close();
+                }catch(SQLException e){}
+            }
+        }
     }
     
 }
