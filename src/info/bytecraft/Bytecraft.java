@@ -146,7 +146,7 @@ public class Bytecraft extends JavaPlugin
         try{
             conn = ConnectionPool.getConnection();
             DBPlayerDAO dbPlayer = new DBPlayerDAO(conn);
-                dbPlayer.updatePlayTime(player);
+            dbPlayer.updatePlayTime(player);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
