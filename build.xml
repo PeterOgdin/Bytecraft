@@ -21,6 +21,10 @@
             outputdir="src"
             sourceinterface="org.bukkit.entity.Player"
             destinationclass="info.bytecraft.api.PlayerDelegate" />
+    	<delegategen
+            outputdir="src"
+    	    sourceinterface="org.bukkit.OfflinePlayer"
+    	    destinationclass="info.bytecraft.api.OfflineDelegate" />
     </target>
 
     <target name="compile" depends="init">
