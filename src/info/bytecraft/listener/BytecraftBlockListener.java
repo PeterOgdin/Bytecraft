@@ -42,11 +42,11 @@ public class BytecraftBlockListener implements Listener
             conn = ConnectionPool.getConnection();
             dbLog = new DBLogDAO(conn);
             dbPlayer = new DBPlayerDAO(conn);
-            dbLog.insertPaperLog(player, loc, event.getBlock().getType(),
-                    "break");
             if(dbLog.isLegal(event.getBlock())){
                 dbPlayer.give(player, plugin.getValue(event.getBlock()));
             }
+            dbLog.insertPaperLog(player, loc, event.getBlock().getType(),
+                    "broke");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -74,7 +74,7 @@ public class BytecraftBlockListener implements Listener
             conn = ConnectionPool.getConnection();
             dbLog = new DBLogDAO(conn);
             dbLog.insertPaperLog(player, loc, event.getBlock().getType(),
-                    "place");
+                    "placed");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
