@@ -1,8 +1,5 @@
 package info.bytecraft.api;
 
-import lombok.Data;
-
-@Data
 public class PaperLog
 {
     private String playerName;
@@ -16,5 +13,45 @@ public class PaperLog
         setDate(date);
         setAction(action);
         setMaterial(material);
+    }
+
+    public String getPlayerName()
+    {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName)
+    {
+        this.playerName = playerName;
+    }
+
+    public String getDate()
+    {
+        return date;
+    }
+
+    public void setDate(String date)
+    {
+        this.date = date;
+    }
+
+    public String getAction()
+    {
+        return action;
+    }
+
+    public void setAction(String action)
+    {
+        this.action = action;
+    }
+
+    public String getMaterial()
+    {
+        return material;
+    }
+
+    public void setMaterial(String material)
+    {
+        this.material = material;
     }
 }

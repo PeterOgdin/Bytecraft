@@ -8,7 +8,6 @@ import java.util.List;
 
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.PlayerBannedException;
-import info.bytecraft.api.Rank;
 import info.bytecraft.commands.*;
 import info.bytecraft.database.DBPlayerDAO;
 import info.bytecraft.listener.*;
