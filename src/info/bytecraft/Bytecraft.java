@@ -8,7 +8,9 @@ import java.util.List;
 
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.PlayerBannedException;
+import info.bytecraft.api.economy.Bank;
 import info.bytecraft.commands.*;
+import info.bytecraft.database.DBBankDAO;
 import info.bytecraft.database.DBPlayerDAO;
 import info.bytecraft.listener.*;
 import info.tregmine.database.ConnectionPool;
@@ -26,10 +28,27 @@ public class Bytecraft extends JavaPlugin
 {
 
     private HashMap<String, BytecraftPlayer> players;
+    
+    private List<Bank> banks;
 
     public void onEnable()
     {
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            DBBankDAO dbBank = new DBBankDAO(conn);
+            banks = dbBank.getBanks();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
         players = Maps.newHashMap();
+        
         for (Player delegate : Bukkit.getOnlinePlayers()) {
             try {
                 addPlayer(delegate);
@@ -194,5 +213,10 @@ public class Bytecraft extends JavaPlugin
         default:
             return 1;
         }
+    }
+    
+    public List<Bank> getBanks()
+    {
+        return banks;
     }
 }

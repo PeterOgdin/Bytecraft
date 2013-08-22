@@ -1,5 +1,6 @@
 package info.bytecraft.api;
 
+import info.bytecraft.api.vector.Vector2D;
 import info.bytecraft.blockfill.Fill;
 import info.bytecraft.database.DBPlayerDAO;
 import info.tregmine.database.ConnectionPool;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -266,6 +268,12 @@ public class BytecraftPlayer extends PlayerDelegate
                 }catch(SQLException e){}
             }
         }
+    }
+    
+    public Vector2D getVector()
+    {
+        Location loc = getLocation();
+        return new Vector2D(loc.getBlockX(), loc.getBlockZ(), loc.getWorld());
     }
     
 }
