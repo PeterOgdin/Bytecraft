@@ -9,8 +9,8 @@ import org.bukkit.Location;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBWarpDAO;
-import info.tregmine.database.ConnectionPool;
 
 public class WarpCommand extends AbstractCommand
 {
@@ -48,7 +48,7 @@ public class WarpCommand extends AbstractCommand
             DBWarpDAO dbWarp = new DBWarpDAO(conn);
             Location loc = dbWarp.getWarp(warp, plugin.getServer());
             if (loc != null) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new WarpTask(player, loc), 40L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new WarpTask(player, loc), 20 * 2L);
                 player.sendMessage(ChatColor.AQUA + "Teleporting to " + warp + " please wait");
             }
         } catch (SQLException e) {

@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.Rank;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBPlayerDAO;
-import info.tregmine.database.ConnectionPool;
 
 public class UserCommand extends AbstractCommand
 {

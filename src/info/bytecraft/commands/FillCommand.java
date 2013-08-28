@@ -10,8 +10,8 @@ import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.blockfill.Fill;
 import info.bytecraft.blockfill.Fill.Action;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBLogDAO;
-import info.tregmine.database.ConnectionPool;
 
 public class FillCommand extends AbstractCommand
 {
