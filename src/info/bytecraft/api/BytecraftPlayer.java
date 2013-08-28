@@ -28,6 +28,11 @@ public class BytecraftPlayer extends PlayerDelegate
     
     private Block fillBlock1;
     private Block fillBlock2;
+    private Block zoneBlock1;
+    private Block zoneBlock2;
+    private Block lotBlock1;
+    private Block lotBlock2;
+    
     private Fill lastFill;
     private Zone currZone = null;
     
@@ -46,6 +51,7 @@ public class BytecraftPlayer extends PlayerDelegate
         super(Bukkit.getPlayer(name));
     }
 
+    //Bytecraft stored values
     public int getId()
     {
         return id;
@@ -85,7 +91,7 @@ public class BytecraftPlayer extends PlayerDelegate
     {
         this.tpblock = tpblock;
     }
-
+    
     public String getChatChannel()
     {
         return chatChannel.toUpperCase();
@@ -96,15 +102,6 @@ public class BytecraftPlayer extends PlayerDelegate
         this.chatChannel = chatChannel;
     }
     
-    public Zone getCurrentZone()
-    {
-        return currZone;
-    }
-    
-    public void setCurrentZone(Zone zone)
-    {
-        this.currZone = zone;
-    }
 
     public long getBalance()
     {
@@ -124,7 +121,7 @@ public class BytecraftPlayer extends PlayerDelegate
             }
         }
     }
-
+    
     public String getFormattedBalance()
     {
         Connection conn = null;
@@ -142,12 +139,6 @@ public class BytecraftPlayer extends PlayerDelegate
                 }
             }
         }
-    }
-
-    public void setDisplayName(String name)
-    {
-        super.setDisplayName(name);
-        super.setPlayerListName(name);
     }
     
     public ChatColor getGodColor(){
@@ -168,7 +159,26 @@ public class BytecraftPlayer extends PlayerDelegate
             }
         }
     }
-
+    
+    //Zones
+    public Zone getCurrentZone()
+    {
+        return currZone;
+    }
+    
+    public void setCurrentZone(Zone zone)
+    {
+        this.currZone = zone;
+    }
+    
+    //org.bukkit.entity.Player override
+    public void setDisplayName(String name)
+    {
+        super.setDisplayName(name);
+        super.setPlayerListName(name);
+    }
+    
+    //Bytecraft non-persistent 
     public BytecraftPlayer getBlessTarget()
     {
         return blessTarget;
@@ -209,11 +219,52 @@ public class BytecraftPlayer extends PlayerDelegate
         this.lastFill = fill;
     }
     
+    public Block getZoneBlock1()
+    {
+        return zoneBlock1;
+    }
+
+    public void setZoneBlock1(Block zoneBlock1)
+    {
+        this.zoneBlock1 = zoneBlock1;
+    }
+
+    public Block getZoneBlock2()
+    {
+        return zoneBlock2;
+    }
+
+    public void setZoneBlock2(Block zoneBlock2)
+    {
+        this.zoneBlock2 = zoneBlock2;
+    }
+
+    public Block getLotBlock1()
+    {
+        return lotBlock1;
+    }
+
+    public void setLotBlock1(Block lotBlock1)
+    {
+        this.lotBlock1 = lotBlock1;
+    }
+
+    public Block getLotBlock2()
+    {
+        return lotBlock2;
+    }
+
+    public void setLotBlock2(Block lotBlock2)
+    {
+        this.lotBlock2 = lotBlock2;
+    }
+
     public Fill getLastFill()
     {
         return this.lastFill;
     }
 
+    //Bytecraft Rank-Inheritence 
     public boolean isAdmin()
     {
         return (this.rank == Rank.ADMIN || this.rank == Rank.SENIOR_ADMIN);
