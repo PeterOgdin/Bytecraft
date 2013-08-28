@@ -1,8 +1,9 @@
 package info.bytecraft.api.economy;
 
+import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.vector.Vector2D;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBBankDAO;
-import info.tregmine.database.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -59,9 +60,22 @@ public class Bank
         return dbBank.getAccounts(this);
     }
     
-    public void createAccount(Bank bank, String name, long toAdd)
+    public void createAccount(Bank bank, BytecraftPlayer player, long toAdd)
     {
-        
+        Connection conn = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            DBBankDAO dbBank = new DBBankDAO(conn);
+            dbBank.createAccount(this, player, toAdd);
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try{
+                    conn.close();
+                }catch(SQLException e){}
+            }
+        }
     }
 
     public int getX1()
