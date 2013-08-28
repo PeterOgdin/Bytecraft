@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -18,27 +19,15 @@ public class DBWarpDAO
         this.conn = conn;
     }
 
-    private World getWorld(Server server, String name)
-    {
-        for (World world : server.getWorlds()) {
-            if (name.matches(world.getName())) {
-                return world;
-            }
-        }
-
-        return null;
-    }
-
     public Location getWarp(String name, Server server)
     {
         PreparedStatement stmt = null;
-        ResultSet rs = null;
         try {
             stmt = conn.prepareStatement("SELECT * FROM warps WHERE name = ?");
             stmt.setString(1, name);
             stmt.execute();
 
-            rs = stmt.getResultSet();
+            ResultSet rs = stmt.getResultSet();
             if (!rs.next()) {
                 return null;
             }
@@ -49,25 +38,42 @@ public class DBWarpDAO
             float pitch = rs.getFloat("pitch");
             float yaw = rs.getFloat("yaw");
 
-            World world = getWorld(server, rs.getString("world"));
-
+            World world = Bukkit.getWorld(rs.getString("world"));
             if (world == null) {
                 return null;
             }
-
             return new Location(world, x, y, z, yaw, pitch);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                }
-            }
             if (stmt != null) {
                 try {
                     stmt.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+    }
+
+    public void createWarp(String name, Location loc)
+    {
+        PreparedStatement stm = null;
+        try {
+            stm = conn.prepareStatement("INSERT INTO warps (name, x, y, z, pitch, yaw, world) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            stm.setString(1, name);
+            stm.setDouble(2, loc.getX());
+            stm.setDouble(3, loc.getY());
+            stm.setDouble(4, loc.getZ());
+            stm.setFloat(5, loc.getPitch());
+            stm.setFloat(6, loc.getYaw());
+            stm.setString(7, loc.getWorld().getName());
+            stm.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
                 } catch (SQLException e) {
                 }
             }
