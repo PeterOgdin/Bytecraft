@@ -2,8 +2,8 @@ package info.bytecraft.api;
 
 import info.bytecraft.api.vector.Vector2D;
 import info.bytecraft.blockfill.Fill;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBPlayerDAO;
-import info.tregmine.database.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -29,6 +29,7 @@ public class BytecraftPlayer extends PlayerDelegate
     private Block fillBlock1;
     private Block fillBlock2;
     private Fill lastFill;
+    private Zone currZone = null;
     
     private BytecraftPlayer blessTarget;
     
@@ -65,7 +66,6 @@ public class BytecraftPlayer extends PlayerDelegate
         this.rank = rank;
         setDisplayName(rank.getColor() + getName());
     }
-
     public boolean isInvisible()
     {
         return invisible;
@@ -94,6 +94,16 @@ public class BytecraftPlayer extends PlayerDelegate
     public void setChatChannel(String chatChannel)
     {
         this.chatChannel = chatChannel;
+    }
+    
+    public Zone getCurrentZone()
+    {
+        return currZone;
+    }
+    
+    public void setCurrentZone(Zone zone)
+    {
+        this.currZone = zone;
     }
 
     public long getBalance()
@@ -226,7 +236,7 @@ public class BytecraftPlayer extends PlayerDelegate
     
     public boolean isMentor()
     {
-        return (isModerator() || this.rank == Rank.MENTOR);
+        return (isAdmin() || this.rank == Rank.MENTOR);
     }
 
     public int getOnlineTime()
