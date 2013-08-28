@@ -159,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `transaction_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `warps` (
+  `warp_id` int(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET latin1 NOT NULL,
   `x` double NOT NULL,
   `y` double NOT NULL,
@@ -166,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `warps` (
   `pitch` float NOT NULL,
   `yaw` float NOT NULL,
   `world` varchar(16) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY `warp_id` (`warp_id`)
   UNIQUE KEY `name.uniqe` (`name`),
   KEY `name-index` (`name`,`x`,`y`,`z`,`pitch`,`yaw`,`world`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -180,15 +182,12 @@ CREATE TABLE IF NOT EXISTS `zone` (
   `zone_id` int(11) NOT NULL AUTO_INCREMENT,
   `zone_world` varchar(50) NOT NULL DEFAULT 'world',
   `zone_name` varchar(32) NOT NULL,
-  `zone_enterdefault` enum('0','1') NOT NULL DEFAULT '1',
-  `zone_placedefault` enum('0','1') NOT NULL DEFAULT '1',
-  `zone_destroydefault` enum('0','1') NOT NULL DEFAULT '1',
-  `zone_pvp` enum('0','1') NOT NULL DEFAULT '0',
-  `zone_hostiles` enum('0','1') DEFAULT '1',
-  `zone_entermessage` varchar(250) NOT NULL,
-  `zone_exitmessage` varchar(250) NOT NULL,
-  `zone_texture` text,
-  `zone_owner` varchar(24) DEFAULT NULL,
+  `zone_whitelist` enum('true','false') NOT NULL DEFAULT 'true',
+  `zone_build` enum('true','false') NOT NULL DEFAULT 'true',
+  `zone_pvp` enum('true','false') NOT NULL DEFAULT 'false',
+  `zone_hostile` enum('true','false') DEFAULT 'true',
+  `zone_entermsg` varchar(250) NOT NULL,
+  `zone_exitmsg` varchar(250) NOT NULL,
   PRIMARY KEY (`zone_id`),
   UNIQUE KEY `name` (`zone_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -231,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `zone_lotuser` (
 
 CREATE TABLE IF NOT EXISTS `zone_rect` (
   `rect_id` int(10) NOT NULL AUTO_INCREMENT,
-  `zone_id` int(10) DEFAULT NULL,
+  `zone_name` varchar(32) NOT NULL,
   `rect_x1` int(10) DEFAULT NULL,
   `rect_y1` int(10) DEFAULT NULL,
   `rect_x2` int(10) DEFAULT NULL,
@@ -247,10 +246,10 @@ CREATE TABLE IF NOT EXISTS `zone_rect` (
 --
 
 CREATE TABLE IF NOT EXISTS `zone_user` (
-  `zone_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `user_perm` enum('owner','maker','allowed','banned') NOT NULL DEFAULT 'allowed',
-  PRIMARY KEY (`zone_id`,`user_id`)
+  `zone_name` varchar(32) NOT NULL,
+  `player_name` varchar(32) NOT NULL,
+  `player_perm` enum('owner','maker','allowed','banned') NOT NULL DEFAULT 'allowed',
+  PRIMARY KEY (`zone_id`,`player_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

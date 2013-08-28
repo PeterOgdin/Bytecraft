@@ -1,10 +1,4 @@
 <project name="bytecraft" default="compile" basedir=".">
-
-    <taskdef
-        name="delegategen"
-        classname="info.tregmine.DelegateGenTask"
-        classpath="lib/delegate_gen.jar:lib/bukkit.jar" />
-
     <property name="src" value="src" />
     <property name="build" value="bin" />
     <property name="lib" value="lib" />
@@ -14,17 +8,6 @@
         <tstamp />
         <mkdir dir="${build}" />
         <copy file="${src}/plugin.yml" todir="${build}" />
-    </target>
-
-    <target name="codegen" depends="init">
-        <delegategen
-            outputdir="src"
-            sourceinterface="org.bukkit.entity.Player"
-            destinationclass="info.bytecraft.api.PlayerDelegate" />
-    	<delegategen
-            outputdir="src"
-    	    sourceinterface="org.bukkit.OfflinePlayer"
-    	    destinationclass="info.bytecraft.api.OfflineDelegate" />
     </target>
 
     <target name="compile" depends="init">
