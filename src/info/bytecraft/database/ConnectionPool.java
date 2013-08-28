@@ -1,4 +1,4 @@
-package info.tregmine.database;
+package info.bytecraft.database;
 
 import java.io.*;
 import java.util.*;
