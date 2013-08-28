@@ -58,12 +58,26 @@ public class DBZoneDAO
         return zones;
     }
     
-    public int createZone(Zone zone)
+    public void createZone(Zone zone, BytecraftPlayer player)
     {
         PreparedStatement stm = null;
         try{
-            stm = conn.prepareStatement("INSERT INTO zone (zone_name, zone_world, zone_whitelist, zone_build, zone_pvp" +
-            		", zone_hostile)");
+            stm = conn.prepareStatement("INSERT INTO zone (zone_name, zone_world, zone_entermsg, zone_exitmsg) VALUES" +
+            		"(?, ?, ?, ?)");
+            stm.setString(1, zone.getName());
+            stm.setString(2, zone.getWorld());
+            stm.setString(3, "Welcome to " + zone.getName());
+            stm.setString(4, "Now leaving " + zone.getName());
+            stm.execute();
+            
+            stm = conn.prepareStatement("INSERT INTO zone_rect (zone_name, rect_x1, rect_z1, rect_x2, rect_z1) " +
+            		"VALUES (?, ?, ?, ?, ?)");
+            stm.setString(1, zone.getName());
+            stm.setInt(2, player.getZoneBlock1().getX());
+            stm.setInt(3, player.getZoneBlock1().getZ());
+            stm.setInt(4, player.getZoneBlock2().getX());
+            stm.setInt(5, player.getZoneBlock2().getZ());
+            stm.execute();
         }catch(SQLException e){
             throw new RuntimeException(e);
         }finally{
@@ -73,7 +87,6 @@ public class DBZoneDAO
                 } catch (SQLException e) {}
             }
         }
-        return 0;
     }
     
     public Zone getZone(String name)
@@ -183,5 +196,31 @@ public class DBZoneDAO
             }
         }
         return Permission.ALLOWED;
+    }
+    
+    public void deleteZone(String name)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("DELETE FROM zone WHERE zone_name = ?");
+            stm.setString(1, name);
+            stm.execute();
+            
+            stm = conn.prepareStatement("DELETE FROM zone_rect WHERE zone_name = ?");
+            stm.setString(1, name);
+            stm.execute();
+            
+            stm = conn.prepareStatement("DELET FROM zone_user WHERE zone_name = ?");
+            stm.setString(1, name);
+            stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
     }
 }
