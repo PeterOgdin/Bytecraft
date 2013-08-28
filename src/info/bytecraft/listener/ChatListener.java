@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBLogDAO;
-import info.tregmine.database.ConnectionPool;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,6 +36,8 @@ public class ChatListener implements Listener
             to = plugin.getPlayer(delegate);
             if(to == player){
                 color = ChatColor.GRAY;
+            }else{
+                color = ChatColor.WHITE;
             }
             
             if(to.getChatChannel().equalsIgnoreCase(player.getChatChannel())){
@@ -64,7 +66,7 @@ public class ChatListener implements Listener
             }
         }
         
-        plugin.getLogger().info(player.getChatChannel() + "<"+ player.getName() + "> " + message);
+        plugin.getLogger().info(player.getChatChannel() + " <"+ player.getName() + "> " + message);
         event.setCancelled(true);
     }
     

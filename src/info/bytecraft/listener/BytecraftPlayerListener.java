@@ -9,8 +9,8 @@ import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.PaperLog;
 import info.bytecraft.api.PlayerBannedException;
 import info.bytecraft.api.Rank;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBLogDAO;
-import info.tregmine.database.ConnectionPool;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -142,6 +142,21 @@ public class BytecraftPlayerListener implements Listener
     public void onDeath(PlayerDeathEvent event)
     {
         event.setDeathMessage(null);
+        /*BytecraftPlayer player = plugin.getPlayer(event.getEntity());
+        Connection conn = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            DBPlayerDAO dbPlayer = new DBPlayerDAO(conn);
+            dbPlayer.take(player, Bytecraft.percent(player.getBalance(), 5));
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try{
+                    conn.close();
+                }catch(SQLException e){}
+            }
+        }*/
     }
 
     @EventHandler
@@ -159,10 +174,11 @@ public class BytecraftPlayerListener implements Listener
             DBLogDAO dbLog = new DBLogDAO(conn);
             for (PaperLog log : dbLog.getLogs(block)) {
                 player.sendMessage(ChatColor.GREEN + log.getPlayerName() + " "
-                        + ChatColor.AQUA + log.getAction()
+                        + ChatColor.AQUA + log.getAction() + " "
                         + log.getMaterial() + ChatColor.GREEN +  " at " + log.getDate());
             }
             event.setCancelled(true);
+            return;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

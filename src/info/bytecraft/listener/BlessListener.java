@@ -8,8 +8,8 @@ import java.util.Set;
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.Notification;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBBlessDAO;
-import info.tregmine.database.ConnectionPool;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

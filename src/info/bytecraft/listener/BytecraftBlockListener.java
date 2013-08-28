@@ -5,9 +5,9 @@ import java.sql.SQLException;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBLogDAO;
 import info.bytecraft.database.DBPlayerDAO;
-import info.tregmine.database.ConnectionPool;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Creeper;

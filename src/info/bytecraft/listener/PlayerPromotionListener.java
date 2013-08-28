@@ -3,8 +3,8 @@ package info.bytecraft.listener;
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.Rank;
+import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBPlayerDAO;
-import info.tregmine.database.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
