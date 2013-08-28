@@ -89,3 +89,7 @@ commands:
         description: See who's online
         usage: /<command>
         aliases: [list]
+    zone:
+        description: Manage zones
+        usage: |
+            /<command> create <name>

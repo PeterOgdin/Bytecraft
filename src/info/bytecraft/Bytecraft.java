@@ -5,6 +5,7 @@ import info.bytecraft.commands.*;
 import info.bytecraft.database.*;
 import info.bytecraft.listener.*;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 
@@ -76,6 +77,7 @@ public class Bytecraft extends JavaPlugin
         getCommand("wallet").setExecutor(new WalletCommand(this));
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("who").setExecutor(new WhoCommand(this));
+        getCommand("zone").setExecutor(new ZoneCommand(this));
     }
 
     private void registerEvents()
@@ -83,10 +85,11 @@ public class Bytecraft extends JavaPlugin
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new ChatListener(this), this);
         pm.registerEvents(new BytecraftPlayerListener(this), this);
-        pm.registerEvents(new BlessListener(this), this);
-        pm.registerEvents(new FillListener(this), this);
+        pm.registerEvents(new BlessListener(this), this);        
         pm.registerEvents(new BytecraftBlockListener(this), this);
+        pm.registerEvents(new FillListener(this), this);
         pm.registerEvents(new PlayerPromotionListener(this), this);
+        pm.registerEvents(new SelectListener(this), this);
         pm.registerEvents(new ZoneListener(this), this);
     }
 
@@ -237,5 +240,13 @@ public class Bytecraft extends JavaPlugin
         }
         double percent = percentage / 100.0;
         return (long) (l * percent);
+    }
+    
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
     }
 }
