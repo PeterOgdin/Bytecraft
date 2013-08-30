@@ -67,11 +67,13 @@ public class Bytecraft extends JavaPlugin
         getCommand("message").setExecutor(new MessageCommand(this));
         getCommand("say").setExecutor(new SayCommand(this, "say"));
         getCommand("summon").setExecutor(new SummonCommand(this));
+        getCommand("spawn").setExecutor(new SpawnCommand(this));
         getCommand("survival").setExecutor(
                 new GameModeCommand(this, "survival"));
         getCommand("time").setExecutor(new TimeCommand(this));
         getCommand("tpblock").setExecutor(new TeleportBlockCommand(this));
         getCommand("teleport").setExecutor(new TeleportCommand(this));
+        getCommand("tppos").setExecutor(new TeleportPosCommand(this));
         getCommand("user").setExecutor(new UserCommand(this));
         getCommand("vanish").setExecutor(new VanishCommand(this));
         getCommand("wallet").setExecutor(new WalletCommand(this));

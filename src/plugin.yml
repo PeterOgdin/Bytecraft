@@ -59,6 +59,9 @@ commands:
         description: Summon a player to your location
         usage: /<command> <player>
         aliases: [s, tphere]
+    spawn:
+        description: Teleport to spawn
+        usage: /<command>
     survival:
         description: Change your gamemode to survival
         usage: /<command>
@@ -72,6 +75,9 @@ commands:
         description: Teleport to a player
         usage: /<command> <player>
         aliases: [tp, tele]
+    tppos:
+        description: Teleport to co-ordinates
+        usage: /<command> x y z
     user:
         description: Manage players permissions
         usage: /<command> make <setter|warned|hardwarned> <player>
@@ -93,3 +99,5 @@ commands:
         description: Manage zones
         usage: |
             /<command> create <name>
+            /<command> <pvp|hostile|build|whitelist> <name> <true|false>
+            /<command> <entermsg|exitmsg> <name> <message>
