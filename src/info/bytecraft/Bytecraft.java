@@ -199,6 +199,24 @@ public class Bytecraft extends JavaPlugin
             }
         }
     }
+    
+    public Zone getZone(String name)
+    {
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            return (new DBZoneDAO(conn)).getZone(name);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+    }
 
     public long getValue(Block block)
     {
