@@ -70,7 +70,7 @@ public class BytecraftPlayer extends PlayerDelegate
     public void setRank(Rank rank)
     {
         this.rank = rank;
-        setDisplayName(rank.getColor() + getName());
+        setPlayerListName(rank.getColor() + getName());
     }
     public boolean isInvisible()
     {
@@ -172,13 +172,35 @@ public class BytecraftPlayer extends PlayerDelegate
     }
     
     //org.bukkit.entity.Player override
-    public void setDisplayName(String name)
+    public void setPlayerListName(String name)
     {
-        super.setDisplayName(name);
         super.setPlayerListName(name);
     }
     
+    public String getDisplayName()
+    {
+        return getRank().getColor() + getName();
+    }
+    
     //Bytecraft non-persistent 
+    public int getMaxTeleportDistance()
+    {
+        if(isAdmin())return Integer.MAX_VALUE;
+        if(isDonator())return 10000;
+        
+        return 300;
+    }
+    
+    public long getTeleportTimeout()
+    {
+        if(isAdmin()) return 20 * 2L;
+        if(rank == Rank.GAURD) return 20 * 3L;
+        
+        if(rank == Rank.DONATOR) return 20 * 4L;
+        
+        return 20 * 5L;
+    }
+    
     public BytecraftPlayer getBlessTarget()
     {
         return blessTarget;
@@ -267,7 +289,12 @@ public class BytecraftPlayer extends PlayerDelegate
     //Bytecraft Rank-Inheritence 
     public boolean isAdmin()
     {
-        return (this.rank == Rank.ADMIN || this.rank == Rank.SENIOR_ADMIN);
+        return (this.rank == Rank.ADMIN || this.rank == Rank.SENIOR_ADMIN || isCoder());
+    }
+    
+    public boolean isCoder()
+    {
+        return this.rank == Rank.CODER;
     }
     
     public boolean isModerator()
@@ -282,7 +309,7 @@ public class BytecraftPlayer extends PlayerDelegate
     
     public boolean isDonator()
     {
-        return (isModerator() || this.rank == Rank.DONATOR);
+        return (isModerator() || this.rank == Rank.DONATOR || this.rank == Rank.BUILDER);
     }
     
     public boolean isMentor()
