@@ -21,6 +21,7 @@ public class Fill
     private Block block2;
     private Material material;
     private World world;
+    public static final int MAX_SIZE = 20000;
 
     public static enum Action {
         FILL, REPLACE, UNDO;
