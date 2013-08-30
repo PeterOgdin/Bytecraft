@@ -5,6 +5,7 @@ import static org.bukkit.ChatColor.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -46,25 +47,7 @@ public class WhoCommand extends AbstractCommand
             Player delegate = Bukkit.getPlayer(args[0]);
             if (delegate != null) {
                 BytecraftPlayer target = plugin.getPlayer(delegate);
-                double x = target.getLocation().getX();
-                double y = target.getLocation().getY();
-                double z = target.getLocation().getZ();
-
-                player.sendMessage(DARK_GRAY + "******************** "
-                        + DARK_PURPLE + "PLAYER INFO" + DARK_GRAY
-                        + " ********************");
-                player.sendMessage(GOLD + "Player: " + target.getDisplayName());
-                player.sendMessage(GOLD + "Id: " + GRAY + target.getId());
-                player.sendMessage(GOLD + "World: " + GRAY
-                        + target.getWorld().getName());
-                player.sendMessage(GOLD + "Location: " + GRAY + x + ", " + y
-                        + ", " + z);
-                player.sendMessage(GOLD + "Channel: " + GRAY
-                        + target.getChatChannel());
-                player.sendMessage(GOLD + "Wallet: "
-                        + target.getFormattedBalance());
-                player.sendMessage(DARK_GRAY
-                        + "******************************************************");
+                whoOther(player.getDelegate(), target);
             }
         }
         return true;
@@ -93,27 +76,36 @@ public class WhoCommand extends AbstractCommand
             Player delegate = Bukkit.getPlayer(args[0]);
             if (delegate != null) {
                 BytecraftPlayer target = plugin.getPlayer(delegate);
-                double x = target.getLocation().getX();
-                double y = target.getLocation().getY();
-                double z = target.getLocation().getZ();
-
-                sender.sendMessage(DARK_GRAY + "******************** "
-                        + DARK_PURPLE + "PLAYER INFO" + DARK_GRAY
-                        + " ********************");
-                sender.sendMessage(GOLD + "sender: " + target.getDisplayName());
-                sender.sendMessage(GOLD + "Id: " + GRAY + target.getId());
-                sender.sendMessage(GOLD + "World: " + GRAY
-                        + target.getWorld().getName());
-                sender.sendMessage(GOLD + "Location: " + GRAY + x + ", " + y
-                        + ", " + z);
-                sender.sendMessage(GOLD + "Channel: " + GRAY
-                        + target.getChatChannel());
-                sender.sendMessage(GOLD + "Wallet: "
-                        + target.getFormattedBalance());
-                sender.sendMessage(DARK_GRAY
-                        + "******************************************************");
+                whoOther(sender, target);
             }
         }
         return true;
+    }
+    
+    public void whoOther(CommandSender player, BytecraftPlayer target)
+    {
+        int x = target.getLocation().getBlockX();
+        int y = target.getLocation().getBlockY();
+        int z = target.getLocation().getBlockZ();
+
+        String ip = target.getAddress().getHostName();
+        
+        player.sendMessage(DARK_GRAY + "******************** "
+                + DARK_PURPLE + "PLAYER INFO" + DARK_GRAY
+                + " ********************");
+        player.sendMessage(GRAY + "Player: " + target.getDisplayName());
+        player.sendMessage(GRAY + "Id: " + GREEN + target.getId());
+        player.sendMessage(GRAY + "World: " + GREEN
+                + target.getWorld().getName());
+        player.sendMessage(GRAY + "Location: " + GREEN + x + ", " + y
+                + ", " + z);
+        player.sendMessage(GRAY + "Channel: " + GREEN
+                + target.getChatChannel());
+        player.sendMessage(GRAY + "Wallet: "
+                + target.getFormattedBalance());
+        player.sendMessage(GRAY + "IP: " + GREEN
+                + ip);
+        player.sendMessage(DARK_GRAY
+                + "******************************************************");
     }
 }
