@@ -55,7 +55,6 @@ public class KickCommand extends AbstractCommand
             Bukkit.broadcastMessage(target.getDisplayName() + ChatColor.RED
                     + " was kicked by " + ChatColor.BLUE + "GOD");
         }
-
         return true;
     }
 }

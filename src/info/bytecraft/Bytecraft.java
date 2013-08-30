@@ -103,10 +103,7 @@ public class Bytecraft extends JavaPlugin
     public BytecraftPlayer getPlayer(String name)
     {
         if (players.containsKey(name)) {
-            BytecraftPlayer player = players.get(name);
-            player.setDisplayName(player.getRank().getColor()
-                    + player.getName());
-            return player;
+            return players.get(name);
         }
         else {
             try {

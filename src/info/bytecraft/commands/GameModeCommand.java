@@ -25,7 +25,9 @@ public class GameModeCommand extends AbstractCommand
                 }
             }else if(args.length == 1){
                 GameMode gm = GameMode.valueOf(args[0].toUpperCase());
-                player.setGameMode(gm);
+                if(gm != null){
+                    player.setGameMode(gm);
+                }
             }
         }else if("creative".equalsIgnoreCase(getCommand())){
             player.setGameMode(GameMode.CREATIVE);

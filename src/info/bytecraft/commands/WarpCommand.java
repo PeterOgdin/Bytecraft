@@ -24,16 +24,19 @@ public class WarpCommand extends AbstractCommand
     {
         private BytecraftPlayer player;
         private Location loc;
+        private String name;
 
-        public WarpTask(BytecraftPlayer player, Location loc)
+        public WarpTask(BytecraftPlayer player, Location loc, String name)
         {
             this.loc = loc;
             this.player = player;
+            this.name = name;
         }
 
         public void run()
         {
             player.teleport(loc);
+            player.sendMessage(ChatColor.AQUA + "Successfully teleported to " + name);
         }
 
     }
@@ -48,8 +51,8 @@ public class WarpCommand extends AbstractCommand
             DBWarpDAO dbWarp = new DBWarpDAO(conn);
             Location loc = dbWarp.getWarp(warp, plugin.getServer());
             if (loc != null) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new WarpTask(player, loc), 20 * 2L);
-                player.sendMessage(ChatColor.AQUA + "Teleporting to " + warp + " please wait");
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new WarpTask(player, loc, warp), 20 * 3L);
+                player.sendMessage(ChatColor.AQUA + "Teleporting to " + ChatColor.GOLD + warp + ChatColor.AQUA + " please wait...");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -57,8 +60,7 @@ public class WarpCommand extends AbstractCommand
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException e) {
-                }
+                } catch (SQLException e) {}
             }
         }
 

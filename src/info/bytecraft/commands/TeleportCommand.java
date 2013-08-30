@@ -42,24 +42,13 @@ public class TeleportCommand extends AbstractCommand
     public boolean handlePlayer(final BytecraftPlayer player, String[] args)
     {
         if(args.length != 1)return true;
-        int maxDistance = 0;
-        if(!player.isDonator()){
-            maxDistance = 300;
-        }else{
-            maxDistance = 10000;
-        }
+        int maxDistance = player.getMaxTeleportDistance();
         Player delegate = Bukkit.getPlayer(args[0]);
         if(delegate != null){
             BytecraftPlayer target = plugin.getPlayer(delegate);
             if(Distance.calc2d(player.getLocation(), target.getLocation()) > maxDistance){
-                if(!player.isAdmin()){
                     player.sendMessage(ChatColor.RED + "You are too far to teleport!");
                     return true;
-                }else{//admin teleport
-                    TeleportTask task = new TeleportTask(player, target);
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);
-                    player.sendMessage(ChatColor.AQUA + "Teleporting to " + target.getDisplayName());
-                }
             }else{
                 if(target.isTeleportBlock()){//teleport block
                     if(!player.isAdmin()){//not admin
@@ -68,13 +57,13 @@ public class TeleportCommand extends AbstractCommand
                         return true;
                     }else{//admin override
                         TeleportTask task = new TeleportTask(player, target);
-                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, player.getTeleportTimeout());//no delay at the monent
                         player.sendMessage(ChatColor.AQUA + "Teleporting to " + target.getDisplayName());
                         return true;
                     }
                 }else{//non teleport block
                     TeleportTask task = new TeleportTask(player, target);
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, 0L);//no delay at the monent
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, player.getTeleportTimeout());//no delay at the monent
                     player.sendMessage(ChatColor.AQUA + "Teleporting to " + target.getDisplayName());
                     return true;
                 }

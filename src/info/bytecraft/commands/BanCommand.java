@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 
 import info.bytecraft.Bytecraft;
 import info.bytecraft.api.BytecraftPlayer;
-import info.bytecraft.api.Notification;
 import info.bytecraft.database.ConnectionPool;
 import info.bytecraft.database.DBPlayerDAO;
 
@@ -24,10 +23,7 @@ public class BanCommand extends AbstractCommand
     
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if(!player.isAdmin()){
-            player.sendNotification(Notification.COMMAND_FAIL);
-            return true;
-        }
+        if(!player.isAdmin())return true;
         if(args.length != 1)return true;
         Player delegate = Bukkit.getPlayer(args[0]);
         if(delegate == null)return true;
