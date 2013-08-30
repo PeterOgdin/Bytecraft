@@ -21,7 +21,7 @@ public class VanishCommand extends AbstractCommand
     
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if(player.getRank() == Rank.SENIOR_ADMIN){//seniors only
+        if(player.isAdmin()){
             if(args.length == 0){
                 Connection conn = null;
                 DBPlayerDAO dbPlayer = null;
