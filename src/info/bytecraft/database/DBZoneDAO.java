@@ -3,6 +3,7 @@ package info.bytecraft.database;
 
 import info.bytecraft.api.BytecraftPlayer;
 import info.bytecraft.api.Zone;
+import info.bytecraft.api.Zone.Flag;
 import info.bytecraft.api.Zone.Permission;
 import info.bytecraft.api.math.Rectangle;
 
@@ -70,7 +71,7 @@ public class DBZoneDAO
             stm.setString(4, "Now leaving " + zone.getName());
             stm.execute();
             
-            stm = conn.prepareStatement("INSERT INTO zone_rect (zone_name, rect_x1, rect_z1, rect_x2, rect_z1) " +
+            stm = conn.prepareStatement("INSERT INTO zone_rect (zone_name, rect_x1, rect_z1, rect_x2, rect_z2) " +
             		"VALUES (?, ?, ?, ?, ?)");
             stm.setString(1, zone.getName());
             stm.setInt(2, player.getZoneBlock1().getX());
@@ -195,7 +196,7 @@ public class DBZoneDAO
                 } catch (SQLException e) {}
             }
         }
-        return Permission.ALLOWED;
+        return null;
     }
     
     public void deleteZone(String name)
@@ -210,8 +211,43 @@ public class DBZoneDAO
             stm.setString(1, name);
             stm.execute();
             
-            stm = conn.prepareStatement("DELET FROM zone_user WHERE zone_name = ?");
+            stm = conn.prepareStatement("DELETE FROM zone_user WHERE zone_name = ?");
             stm.setString(1, name);
+            stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+    
+    public void updateFlag(String zone, Flag flag, String value)
+    {
+        String sql = null;
+        switch(flag)
+        {
+        case PVP: sql = "UPDATE zone SET zone_pvp = ? WHERE zone_name = ?";
+            break;
+        case WHITELIST: sql = "UPDATE zone SET zone_whitelist = ? WHERE zone_name = ?";
+            break;
+        case HOSTILE: sql = "UPDATE zone SET zone_hostile = ? WHERE zone_name = ?";
+            break;
+        case BUILD: sql = "UPDATE zone SET zone_build = ? WHERE zone_name = ?";
+            break;
+        case ENTERMSG: sql = "UPDATE zone SET zone_entermsg = ? WHERE zone_name = ?";
+            break;
+        case EXITMSG: sql = "UPDATE zone SET zone_exitmsg = ? WHERE zone_name = ?";
+            break;
+        }
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement(sql);
+            stm.setString(1, value);
+            stm.setString(2, zone);
             stm.execute();
         }catch(SQLException e){
             throw new RuntimeException(e);
