@@ -24,9 +24,6 @@ public class UserCommand extends AbstractCommand
 
     public boolean handlePlayer(BytecraftPlayer player, String[] args)
     {
-        if (!player.isMentor())
-            return true;
-
         if (args.length == 3) {// user make settler player
             if ("make".equalsIgnoreCase(args[0])) {
                 Player delegate = Bukkit.getPlayer(args[2]);
@@ -40,6 +37,7 @@ public class UserCommand extends AbstractCommand
 
                         String input = args[1].toLowerCase();
                         if (input.equalsIgnoreCase("settler")) {
+                            if(!player.isMentor())return true;
                             target.setRank(Rank.SETTLER);
                             dbPlayer.promoteToSettler(target);
                             target.setDisplayName(target.getRank().getColor()
@@ -52,6 +50,7 @@ public class UserCommand extends AbstractCommand
                                     + target.getRank().toString());
                         }
                         else if (input.equalsIgnoreCase("member")) {
+                            if(!player.isMentor())return true;
                             target.setRank(Rank.MEMBER);
                             target.setDisplayName(target.getRank().getColor()
                                     + target.getName());

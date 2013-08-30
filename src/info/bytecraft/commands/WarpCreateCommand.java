@@ -2,7 +2,6 @@ package info.bytecraft.commands;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,7 +36,7 @@ public class WarpCreateCommand extends AbstractCommand
             dbWarp.createWarp(name, l);
             player.sendMessage(ChatColor.LIGHT_PURPLE + "Created warp: "
                     + ChatColor.GREEN + name + ChatColor.WHITE + " at "
-                    + ChatColor.GREEN + formatLocation(l));
+                    + ChatColor.GREEN + "[" + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() + "]");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
@@ -49,14 +48,5 @@ public class WarpCreateCommand extends AbstractCommand
             }
         }
         return true;
-    }
-
-    public String formatLocation(Location loc)
-    {
-        DecimalFormat df = new DecimalFormat("#########.##");
-        return String.format("{%s, %s, %s, %s, %s, %s}", df.format(loc.getX()),
-                df.format(loc.getY()), df.format(loc.getZ()), df.format(loc
-                        .getPitch()), df.format(loc.getYaw()), loc.getWorld()
-                        .getName());
     }
 }
