@@ -66,8 +66,23 @@ public class BytecraftPlayerListener implements Listener
             Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Welcome "
                     + player.getDisplayName() + ChatColor.DARK_AQUA
                     + " to bytecraft!");
-                    if(!player.hasPlayedBefore()){
-                player.teleport(new org.bukkit.Location(Bukkit.getWorld("world"), -254.5, 7, -134.5, 2, (float) -179.39));
+            String name = player.getRank().getColor() + player.getName();
+            if(name.length() > 16){
+                name = name.substring(0, 16);
+            }
+            player.setPlayerListName(name);
+            if (!player.hasPlayedBefore()) {
+                player.teleport(new org.bukkit.Location(Bukkit
+                        .getWorld("world"), -254.5, 7, -134.5, 2,
+                        (float) -179.39));
+            }
+            if(player.getRank() == Rank.NEWCOMER){
+                for(BytecraftPlayer other: plugin.getOnlinePlayers()){
+                    if(other.isMentor()){
+                        other.sendMessage(other.getDisplayName() + ChatColor.AQUA +
+                                " has joined as a newcomer, you should help them out!");
+                    }
+                }
             }
         }
     }
@@ -75,7 +90,6 @@ public class BytecraftPlayerListener implements Listener
     @EventHandler
     public void onLogin(PlayerLoginEvent event)
     {
-        Player player = event.getPlayer();
         try {
             plugin.addPlayer(event.getPlayer());
         } catch (PlayerBannedException e) {
