@@ -51,17 +51,52 @@ public class DBHomeDAO
                 }catch(SQLException e){}
             }
         }
+        return null;
     }
     
-    public void setHome(BytecraftPlayer player, Location homeLoc)
+    public Location getHome(String player)
     {
         PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM player_home WHERE player_name = ?");
+            stm.setString(1, player);
+            stm.execute();
+            
+            ResultSet rs = stm.getResultSet();
+            Location loc = null;
+            if(rs.next()){
+                int x = rs.getInt("home_x");
+                int y = rs.getInt("home_y");
+                int z = rs.getInt("home_z");
+                float pitch = rs.getFloat("home_pitch");
+                float yaw = rs.getFloat("home_yaw");
+                World world = Bukkit.getWorld(rs.getString("home_world"));
+                loc = new Location(world, x, y, z, yaw, pitch);
+                return loc;
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try{
+                    stm.close();
+                }catch(SQLException e){}
+            }
+        }
+        return null;
+    }
+    
+    public void setHome(BytecraftPlayer player)
+    {
+        PreparedStatement stm = null;
+        Location homeLoc = player.getLocation();
         try{
             stm = conn.prepareStatement("SELECT * FROM player_home WHERE player_name = ?");
             stm.setString(1, player.getName());
             stm.execute();
             if(stm.getResultSet().next()){
-                updateHome(player, homeLoc);
+                updateHome(player);
+                return;
             }else{
                 stm = conn.prepareStatement("INSERT INTO player_home (player_name, home_x, home_y, home_z, home_yaw, home_pitch, home_world) VALUES" +
                 		"(?, ?, ?, ?, ?, ?, ?)");
@@ -85,9 +120,10 @@ public class DBHomeDAO
         }
     }
     
-    private void updateHome(BytecraftPlayer player, Location homeLoc)
+    private void updateHome(BytecraftPlayer player)
     {
         PreparedStatement stm = null;
+        Location homeLoc = player.getLocation();
         try{
             stm = conn.prepareStatement("UPDATE player_home SET block_x = ?, block_y = ?, block_z = ?, block_yaw = ?, block_pitch = ?, block_world = ?" +
             		"WHERE player_name = ?");
