@@ -59,6 +59,8 @@ public class Bytecraft extends JavaPlugin
                 new GameModeCommand(this, "gamemode"));
         getCommand("give").setExecutor(new GiveCommand(this));
         getCommand("god").setExecutor(new SayCommand(this, "god"));
+        getCommand("home").setExecutor(new HomeCommand(this));
+        getCommand("inv").setExecutor(new InventoryCommand(this));
         getCommand("item").setExecutor(new ItemCommand(this));
         getCommand("kick").setExecutor(new KickCommand(this));
         getCommand("kill").setExecutor(new KillCommand(this));
@@ -77,6 +79,7 @@ public class Bytecraft extends JavaPlugin
         getCommand("user").setExecutor(new UserCommand(this));
         getCommand("vanish").setExecutor(new VanishCommand(this));
         getCommand("wallet").setExecutor(new WalletCommand(this));
+        getCommand("warn").setExecutor(new WarnCommand(this));
         getCommand("warp").setExecutor(new WarpCommand(this));
         getCommand("who").setExecutor(new WhoCommand(this));
         getCommand("zone").setExecutor(new ZoneCommand(this));
