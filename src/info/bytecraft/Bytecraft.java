@@ -115,6 +115,26 @@ public class Bytecraft extends JavaPlugin
         }
         return null;
     }
+    
+    public BytecraftPlayer getPlayerOffline(String name)
+    {
+        if(this.players.containsKey(name)){
+            return players.get(name);
+        }
+        Connection conn = null;
+        try{
+            conn = ConnectionPool.getConnection();
+            return (new DBPlayerDAO(conn)).getPlayer(name);
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(conn != null){
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
 
     public BytecraftPlayer addPlayer(Player srcPlayer)
             throws PlayerBannedException
