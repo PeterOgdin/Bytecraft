@@ -100,6 +100,15 @@ public class Zone
             this.permNotification = permNotification;
         }
     }
+    
+    public static enum Flag{
+        PVP,
+        WHITELIST,
+        BUILD,
+        HOSTILE,
+        ENTERMSG,
+        EXITMSG;
+    }
 
     private int id;
     private String name;
