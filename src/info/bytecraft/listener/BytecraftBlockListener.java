@@ -11,6 +11,7 @@ import info.bytecraft.database.DBPlayerDAO;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -86,12 +87,15 @@ public class BytecraftBlockListener implements Listener
             }
         }
     }
-
+    
     @EventHandler
     public void onExplode(EntityExplodeEvent event)
     {
         if(event.getEntity() instanceof Creeper){
             event.setCancelled(true);
+            return;
+        }else if(event.getEntityType() == EntityType.PRIMED_TNT){
+        	event.setCancelled(true);
         }
     }
 }
