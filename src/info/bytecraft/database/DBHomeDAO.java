@@ -40,8 +40,8 @@ public class DBHomeDAO
                 float yaw = rs.getFloat("home_yaw");
                 World world = Bukkit.getWorld(rs.getString("home_world"));
                 loc = new Location(world, x, y, z, yaw, pitch);
+                return loc;
             }
-            return loc;
         }catch(SQLException e){
             throw new RuntimeException(e);
         }finally{

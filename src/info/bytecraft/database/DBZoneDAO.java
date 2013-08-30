@@ -259,4 +259,73 @@ public class DBZoneDAO
             }
         }
     }
+    
+    public void addUser(Zone zone, String name, Permission p)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("SELECT * FROM zone_user WHERE zone_name = ? AND player_name = ?");
+            stm.setString(1, zone.getName());
+            stm.setString(2, name);
+            stm.execute();
+            ResultSet rs = stm.getResultSet();
+            if(rs.next()){
+                updateUser(zone, name, p);
+            }else{
+                stm = conn.prepareStatement("INSERT INTO zone_user (zone_name, player_name, player_perm) VALUES (?, ?, ?)");
+                stm.setString(1, zone.getName());
+                stm.setString(2, name);
+                stm.setString(3, p.name().toLowerCase());
+                stm.execute();
+            }
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+    
+    private void updateUser(Zone zone, String name, Permission p)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("UPDATE zone_user SET player_perm = ? WHERE zone_name = ? AND player_name = ?");
+            stm.setString(1, p.name().toLowerCase());
+            stm.setString(2, zone.getName());
+            stm.setString(3, name);
+            stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+    
+    public boolean delUser(Zone zone, String name)
+    {
+        PreparedStatement stm = null;
+        try{
+            stm = conn.prepareStatement("DELETE FROM zone_user WHERE zone_name = ? AND player_name = ?");
+            stm.setString(1, zone.getName());
+            stm.setString(2, name);
+            stm.execute();
+        }catch(SQLException e){
+            throw new RuntimeException(e);
+        }finally{
+            if(stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException e) {}
+            }
+        }
+        return true;
+    }
 }
