@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -31,6 +32,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.google.common.collect.Maps;
@@ -64,12 +66,16 @@ public class BytecraftPlayerListener implements Listener
             Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "Welcome "
                     + player.getDisplayName() + ChatColor.DARK_AQUA
                     + " to bytecraft!");
+                    if(!player.hasPlayedBefore()){
+                player.teleport(new org.bukkit.Location(Bukkit.getWorld("world"), -254.5, 7, -134.5, 2, (float) -179.39));
+            }
         }
     }
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event)
     {
+        Player player = event.getPlayer();
         try {
             plugin.addPlayer(event.getPlayer());
         } catch (PlayerBannedException e) {
@@ -99,6 +105,22 @@ public class BytecraftPlayerListener implements Listener
             return;
         BytecraftPlayer player = plugin.getPlayer((Player) event.getEntity());
         event.setCancelled(player.isAdmin());
+    }
+    
+    @EventHandler
+    public void onPvp(EntityDamageByEntityEvent event)
+    {
+        if(event.getDamager() instanceof Player)
+        {
+            if(event.getEntity() instanceof Player)
+            {
+                BytecraftPlayer player = plugin.getPlayer((Player)event.getEntity());
+                if(player.getCurrentZone() == null || !player.getCurrentZone().isPvp()){
+                    event.setCancelled(true);
+                    ((Player)event.getDamager()).sendMessage(ChatColor.RED + "You are not in a pvp zone.");
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -157,6 +179,12 @@ public class BytecraftPlayerListener implements Listener
                 }catch(SQLException e){}
             }
         }*/
+    }
+    
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event)
+    {
+        event.setRespawnLocation(new org.bukkit.Location(Bukkit.getWorld("world"), -254.5, 7, -134.5, (float) -179.39, 2));
     }
 
     @EventHandler
