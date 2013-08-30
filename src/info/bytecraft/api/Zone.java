@@ -260,4 +260,22 @@ public class Zone
             }
         }
     }
+    
+    public boolean intersects(Zone otherZone)
+    {
+        Point p1 = rect.getPoint1();
+        Point p2 = rect.getPoint2();
+        int zoneWidth = Math.max(p1.getX(), p2.getX()) - Math.min(p1.getX(), p2.getX());
+        int zoneHeight = Math.max(p1.getZ(), p2.getZ()) - Math.min(p1.getZ(), p2.getZ());
+        
+        Point p3 = otherZone.getRect().getPoint1();
+        Point p4 = otherZone.getRect().getPoint2();
+        
+        int otherWidth = Math.max(p3.getX(), p4.getX()) - Math.min(p3.getX(), p4.getX());
+        int otherHeight = Math.max(p3.getZ(), p4.getZ()) - Math.min(p3.getZ(), p4.getZ());
+        
+        java.awt.Rectangle r1 = new java.awt.Rectangle(p1.getX(), p1.getZ(), zoneWidth, zoneHeight);
+        java.awt.Rectangle r2 = new java.awt.Rectangle(p3.getX(), p3.getZ(), otherWidth, otherHeight);
+        return r1.intersects(r2);
+    }
 }
